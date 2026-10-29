@@ -1,26 +1,400 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Design tokens taken from the original site (Elementor kit + SeatEvent theme, measured in the browser). */
+@theme {
+  --color-brand: #21b354;
+  --color-brand-600: #1c9a48;
+  --color-brand-700: #17803c;
+  --color-brand-800: #126632;
+  --color-brand-50: #e9f7ee;
+  --color-ink: #39364f;        /* headings */
+  --color-body: #717488;       /* body copy */
+  --color-text: #323232;       /* strong text */
+  --color-night: #030a1f;      /* dark panels (sponsorship CTA) */
+  --color-midnight: #0b1620;   /* dark header banners */
+  --color-indigo: #1f0d6b;     /* European registration card */
+  --color-charcoal: #191919;   /* dark buttons */
+  --color-mist: #ebebeb;       /* grey bands */
+  --color-field: #f4f4f4;      /* form fields */
+  --color-snow: #f7f9fe;       /* light tinted sections */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-heading: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-urbanist), "Urbanist", ui-sans-serif, system-ui, sans-serif;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --container-site: 1360px;
+  --radius-site: 5px;
+
+  /* Motion tokens. ease-spring is the curve the original theme uses on buttons. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0, 0.97, 0.43, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: none; }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    background: #fff;
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--color-ink);
+    font-weight: 700;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
+
+@layer components {
+  .site-container {
+    margin-inline: auto;
+    width: 100%;
+    max-width: var(--container-site);
+    padding-inline: 20px;
+  }
+  @media (min-width: 768px) {
+    .site-container { padding-inline: 40px; }
+  }
+
+  /*
+   * Buttons. The original flips green → dark grey with a springy curve
+   * (cubic-bezier(0,.97,.43,1)); we keep that and add a light sweep, a 2px lift and a press state.
+   */
+  .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-site);
+    padding: 13px 28px;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    transition:
+      background-color 0.5s var(--ease-spring),
+      color 0.3s var(--ease-out),
+      border-color 0.3s var(--ease-out),
+      box-shadow 0.45s var(--ease-out),
+      transform 0.45s var(--ease-spring);
+    will-change: transform;
+  }
+  /* Diagonal light sweep on hover. */
+  .btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.28) 48%, transparent 66%);
+    transform: translateX(-120%);
+    transition: transform 0.8s var(--ease-out);
+    pointer-events: none;
+  }
+  .btn:hover::after { transform: translateX(120%); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0) scale(0.97); transition-duration: 0.12s; }
+  .btn svg { transition: transform 0.4s var(--ease-spring); }
+  .btn:hover svg { transform: translateX(3px); }
+
+  .btn-primary { background: var(--color-brand); color: #fff; box-shadow: 0 6px 18px -8px rgba(33, 179, 84, 0.55); }
+  .btn-primary:hover { background: #424242; box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.45); }
+  .btn-dark { background: var(--color-charcoal); color: #fff; box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.5); }
+  .btn-dark:hover { background: var(--color-brand); box-shadow: 0 14px 30px -12px rgba(33, 179, 84, 0.6); }
+  .btn-outline { border: 1px solid var(--color-brand); color: var(--color-brand); }
+  .btn-outline:hover { background: var(--color-brand); color: #fff; box-shadow: 0 14px 30px -14px rgba(33, 179, 84, 0.6); }
+
+  /* Text links: underline that draws in from the left. */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.45s var(--ease-out), color 0.3s var(--ease-out);
+  }
+  .link-underline:hover, .link-underline:focus-visible { background-size: 100% 1px; }
+
+  /* Navigation: green bar that grows from the centre under the label. */
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 14px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--color-brand);
+    transform: scaleX(0);
+    transition: transform 0.45s var(--ease-out);
+  }
+  .nav-link:hover::after, .nav-link[aria-current="page"]::after, .nav-link[data-active="true"]::after { transform: scaleX(1); }
+
+  /* Cards lift and deepen their shadow. */
+  .hover-lift {
+    transition: transform 0.5s var(--ease-spring), box-shadow 0.5s var(--ease-out);
+  }
+  .hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -24px rgba(17, 24, 39, 0.28);
+  }
+
+  /* Images zoom inside their frame (original speaker cards zoom to 1.1). */
+  .zoom-frame { overflow: hidden; }
+  .zoom-frame img { transition: transform 0.9s var(--ease-out), filter 0.6s var(--ease-out); }
+  .group:hover .zoom-frame img, .zoom-frame:hover img { transform: scale(1.08); }
+
+  /* Logos: always full colour, exactly as on the live site; a gentle lift on hover. */
+  .logo-tile { transition: transform 0.5s var(--ease-spring); }
+  @media (hover: hover) {
+    .logo-tile:hover { transform: translateY(-4px) scale(1.04); }
+  }
+
+  .site-field {
+    width: 100%;
+    border-radius: var(--radius-site);
+    background: var(--color-field);
+    padding: 13px 17px;
+    font-size: 15px;
+    line-height: 21px;
+    color: #1f2124;
+    border: 1px solid transparent;
+    transition: border-color 0.3s var(--ease-out), background-color 0.3s var(--ease-out), box-shadow 0.4s var(--ease-out);
+  }
+  .site-field:hover { background: #efefef; }
+  .site-field::placeholder { color: #4b4b55; }
+  .site-field:focus { outline: none; border-color: var(--color-brand); background: #fff; box-shadow: 0 0 0 4px rgba(33, 179, 84, 0.12); }
+  .site-field[aria-invalid="true"] { border-color: #d63638; }
+
+  /* Rich text (sanitized HTML from the editor or WordPress import). */
+  .prose-site { color: var(--color-body); font-size: 16px; line-height: 1.6; }
+  .prose-site > * + * { margin-top: 1em; }
+  .prose-site h2, .prose-site h3, .prose-site h4 { font-family: var(--font-heading); color: var(--color-ink); line-height: 1.3; margin-top: 1.4em; }
+  .prose-site h2 { font-size: 1.75rem; }
+  .prose-site h3 { font-size: 1.4rem; }
+  .prose-site h4 { font-size: 1.15rem; }
+  .prose-site a { color: var(--color-brand); text-decoration: underline; font-weight: 600; }
+  .prose-site strong { color: var(--color-text); }
+  .prose-site ul { list-style: disc; padding-left: 1.4em; }
+  .prose-site ol { list-style: decimal; padding-left: 1.4em; }
+  .prose-site li + li { margin-top: 0.35em; }
+  .prose-site blockquote { border-left: 3px solid var(--color-brand); padding-left: 1em; font-style: italic; }
+  .prose-site img { border-radius: var(--radius-site); height: auto; max-width: 100%; }
+  .prose-site table { width: 100%; border-collapse: collapse; }
+  .prose-site th, .prose-site td { border: 1px solid #e5e5ea; padding: 0.5em 0.75em; text-align: left; }
+  .prose-site .text-brand { color: var(--color-brand); }
+  .prose-site .text-dark { color: var(--color-ink); }
+  .prose-invert { color: #fff; }
+  .prose-invert strong { color: #fff; }
+
+  /* Ticket-style notches used on the stats strip and registration cards. */
+  .ticket-notch { position: relative; }
+  .ticket-notch::before, .ticket-notch::after {
+    content: ""; position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px;
+    border-radius: 9999px; background: var(--notch-color, #fff);
+  }
+  .ticket-notch::before { left: -11px; }
+  .ticket-notch::after { right: -11px; }
+
+  .bg-dark-texture {
+    background-color: var(--color-midnight);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(33,179,84,0.10), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(80,120,255,0.10), transparent 45%),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 6px);
+  }
+}
+
+/* ───────────────────────── Motion system ─────────────────────────
+ * Scroll reveals: elements carry data-reveal="up|down|left|right|zoom|scale|fade|wipe|blur".
+ * Content is only hidden once <html> has .reveal-ready (added by RevealObserver after
+ * hydration, and never when the visitor prefers reduced motion), so nothing disappears
+ * without JavaScript. A parent with data-reveal-stagger animates its direct children in turn.
+ */
+/* Start state of each variant (always defined so the keyframes can read it). */
+[data-reveal] { --rv-t: none; --rv-f: none; }
+/* "fade" (and any unknown value) simply fades in. */
+[data-reveal="up"] { --rv-t: translate3d(0, 36px, 0); }
+[data-reveal="down"] { --rv-t: translate3d(0, -28px, 0); }
+[data-reveal="left"] { --rv-t: translate3d(-48px, 0, 0); }
+[data-reveal="right"] { --rv-t: translate3d(48px, 0, 0); }
+[data-reveal="zoom"] { --rv-t: scale(0.82) translate3d(0, 24px, 0); }
+[data-reveal="scale"] { --rv-t: scale(0.94); }
+[data-reveal="blur"] { --rv-t: scale(1.03); --rv-f: blur(12px); }
+[data-reveal-stagger] > * { --rv-t: translate3d(0, 28px, 0); --rv-f: none; }
+
+html.reveal-ready [data-reveal]:not(.is-revealed):not([data-reveal="wipe"]),
+html.reveal-ready [data-reveal-stagger]:not(.is-revealed) > * {
+  opacity: 0;
+  transform: var(--rv-t);
+  filter: var(--rv-f);
+}
+/* Wipe clips the children, never the observed element (a clipped target never "intersects"). */
+html.reveal-ready [data-reveal="wipe"]:not(.is-revealed) > * { clip-path: inset(0 100% 0 0); }
+
+[data-reveal].is-revealed { animation: reveal-in 1s var(--ease-out) var(--rd, 0ms) both; }
+[data-reveal="wipe"].is-revealed { animation: none; }
+[data-reveal="wipe"].is-revealed > * { animation: reveal-wipe 1.3s var(--ease-in-out) var(--rd, 0ms) both; }
+[data-reveal="blur"].is-revealed { animation-duration: 1.2s; }
+[data-reveal-stagger].is-revealed > * {
+  animation: reveal-in 0.9s var(--ease-out) both;
+  animation-delay: calc(var(--rd, 0ms) + var(--si, 0) * 90ms);
+}
+[data-reveal-stagger] > :nth-child(2) { --si: 1; }
+[data-reveal-stagger] > :nth-child(3) { --si: 2; }
+[data-reveal-stagger] > :nth-child(4) { --si: 3; }
+[data-reveal-stagger] > :nth-child(5) { --si: 4; }
+[data-reveal-stagger] > :nth-child(6) { --si: 5; }
+[data-reveal-stagger] > :nth-child(7) { --si: 6; }
+[data-reveal-stagger] > :nth-child(8) { --si: 7; }
+[data-reveal-stagger] > :nth-child(9) { --si: 8; }
+[data-reveal-stagger] > :nth-child(10) { --si: 9; }
+[data-reveal-stagger] > :nth-child(11) { --si: 10; }
+[data-reveal-stagger] > :nth-child(n + 12) { --si: 11; }
+[data-reveal-delay="100"] { --rd: 100ms; }
+[data-reveal-delay="200"] { --rd: 200ms; }
+[data-reveal-delay="300"] { --rd: 300ms; }
+[data-reveal-delay="400"] { --rd: 400ms; }
+[data-reveal-delay="500"] { --rd: 500ms; }
+[data-reveal-delay="600"] { --rd: 600ms; }
+[data-reveal-delay="800"] { --rd: 800ms; }
+
+@keyframes reveal-in {
+  from { opacity: 0; transform: var(--rv-t, translate3d(0, 28px, 0)); filter: var(--rv-f, none); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes reveal-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* Hero entrance (runs on load, no observer needed). */
+.hero-line { --rv-t: translate3d(0, 28px, 0); animation: reveal-in 1s var(--ease-out) both; }
+.hero-line:nth-child(2) { animation-delay: 0.08s; }
+.hero-line:nth-child(3) { animation-delay: 0.16s; }
+.hero-line:nth-child(4) { animation-delay: 0.24s; }
+.hero-line:nth-child(5) { animation-delay: 0.32s; }
+.hero-line:nth-child(6) { animation-delay: 0.4s; }
+.hero-media { animation: hero-media 1.4s var(--ease-out) 0.15s both; }
+@keyframes hero-media { from { opacity: 0; transform: scale(0.9) rotate(-2deg); } to { opacity: 1; transform: none; } }
+
+/* Ambient motion. */
+@keyframes float-y { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -12px, 0); } }
+@keyframes drift { 0%, 100% { transform: translate3d(0, 0, 0) rotate(0); } 50% { transform: translate3d(6px, -8px, 0) rotate(6deg); } }
+@keyframes wave-sway { 0%, 100% { transform: translateX(0) scaleY(1); } 50% { transform: translateX(-2%) scaleY(1.08); } }
+@keyframes ring-pulse { 0% { transform: scale(1); opacity: 0.55; } 100% { transform: scale(1.9); opacity: 0; } }
+@keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+@keyframes pop-in { 0% { opacity: 0; transform: scale(0.92) translateY(8px); } 100% { opacity: 1; transform: none; } }
+@keyframes check-draw { from { stroke-dashoffset: 30; } to { stroke-dashoffset: 0; } }
+@keyframes slide-in-right { from { transform: translateX(100%); } to { transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+/* Opacity only: a transform here would break position:fixed descendants during the fade. */
+@keyframes page-enter { from { opacity: 0; } to { opacity: 1; } }
+
+.animate-float { animation: float-y 7s var(--ease-in-out) infinite; }
+.animate-drift { animation: drift 9s var(--ease-in-out) infinite; }
+.animate-wave { animation: wave-sway 6s var(--ease-in-out) infinite; transform-origin: bottom center; }
+.animate-pop { animation: pop-in 0.6s var(--ease-spring) both; }
+.animate-page { animation: page-enter 0.6s var(--ease-out) both; }
+.animate-drawer { animation: slide-in-right 0.55s var(--ease-out) both; }
+.animate-fade { animation: fade-in 0.35s var(--ease-out) both; }
+.check-draw { stroke-dasharray: 30; animation: check-draw 0.6s var(--ease-out) 0.25s both; }
+
+/* Pulsing rings around video play buttons (original: pulsing green circle). */
+.pulse-rings::before, .pulse-rings::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid rgba(33, 179, 84, 0.55);
+  animation: ring-pulse 2.4s var(--ease-out) infinite;
+  pointer-events: none;
+}
+.pulse-rings::after { animation-delay: 1.2s; }
+
+/* Staggered entrance for menu items inside the mobile drawer. */
+.drawer-item { --rv-t: translate3d(24px, 0, 0); animation: reveal-in 0.6s var(--ease-out) both; }
+
+/* Parallax for banner backgrounds, driven by scroll (Chrome/Edge/Safari 26+). Static elsewhere. */
+@supports (animation-timeline: view()) {
+  .parallax-media {
+    animation: parallax-shift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+  @keyframes parallax-shift { from { transform: translate3d(0, -9%, 0) scale(1.18); } to { transform: translate3d(0, 9%, 0) scale(1.18); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-drift, .animate-wave, .pulse-rings::before, .pulse-rings::after, .parallax-media { animation: none !important; }
+  .hero-line, .hero-media, .drawer-item { opacity: 1 !important; transform: none !important; }
+}
+
+/* Interactive hero photo (HeroMedia). Variables are written by pointer movement. */
+.hero-tilt { --rx: 0deg; --ry: 0deg; --px: 0px; --py: 0px; --gx: 50%; --gy: 40%; }
+.hero-tilt-card {
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 0.9s var(--ease-out);
+  will-change: transform;
+}
+.hero-tilt[data-active="true"] .hero-tilt-card { transition-duration: 0.25s; }
+.hero-tilt-photo {
+  transform: translate3d(var(--px), var(--py), 0) scale(1.02);
+  transition: transform 0.9s var(--ease-out);
+}
+.hero-tilt[data-active="true"] .hero-tilt-photo { transform: translate3d(var(--px), var(--py), 0) scale(1.06); transition-duration: 0.35s; }
+.hero-tilt-wave { translate: calc(var(--px) * -0.6) 0; transition: translate 0.9s var(--ease-out); }
+.hero-tilt-glare {
+  background: radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.28), transparent 45%);
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  transition: opacity 0.6s var(--ease-out);
+}
+.hero-tilt[data-active="true"] .hero-tilt-glare { opacity: 1; }
+.hero-tilt-shadow {
+  transform: translate3d(calc(var(--px) * -1.2), calc(var(--py) * -1.2 + 24px), -40px);
+  transition: transform 0.9s var(--ease-out), opacity 0.6s;
+  opacity: 0.55;
+}
+.hero-tilt[data-active="true"] .hero-tilt-shadow { opacity: 0.9; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-tilt-card, .hero-tilt-photo, .hero-tilt-wave, .hero-tilt-shadow { transform: none !important; translate: none !important; }
+}
+
+/* Logo carousel (LogoCarousel). The track contains two identical halves; -50% loops seamlessly. */
+@keyframes logo-marquee { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+.logo-carousel-track { animation: logo-marquee linear infinite; will-change: transform; }
+.logo-carousel:hover .logo-carousel-track,
+.logo-carousel[data-paused="true"] .logo-carousel-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  /* Static, wrapped row of the real logos only (copies hidden). */
+  .logo-carousel-viewport { mask-image: none !important; }
+  .logo-carousel-track { animation: none !important; width: auto; flex-wrap: wrap; justify-content: center; row-gap: 2rem; }
+  .logo-carousel-track > [aria-hidden="true"] { display: none; }
+}
+
+/* Cookie banner is server-rendered; hidden before paint once a choice exists (see [lang]/layout.tsx). */
+.consent-set .cookie-banner { display: none; }

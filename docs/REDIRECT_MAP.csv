@@ -1,0 +1,302 @@
+old_url,wordpress_status,new_status,new_url,redirect_type,notes
+/,301,200,/,preserved,
+/fr/,301,200,/fr/,preserved,
+/france-to-boost-agribusiness-ties-in-nigeria/,200,200,/france-to-boost-agribusiness-ties-in-nigeria/,preserved,
+/spotlight-nigeria-investment-forum/,200,200,/spotlight-nigeria-investment-forum/,preserved,
+/spotlight-nigeria-2018-the-diaspora-effect/,200,200,/spotlight-nigeria-2018-the-diaspora-effect/,preserved,
+/plenary-session-six-digital-and-technology-taking-part-in-the-nigerian-silicon-valley-story-opportunities-for-foreign-investments-knowledge-sharing-and-strategic-partnerships/,200,200,/plenary-session-six-digital-and-technology-taking-part-in-the-nigerian-silicon-valley-story-opportunities-for-foreign-investments-knowledge-sharing-and-strategic-partnerships/,preserved,
+/plenary-session-five-real-estate-hospitality-and-construction/,200,200,/plenary-session-five-real-estate-hospitality-and-construction/,preserved,
+/plenary-session-four-agribusiness-and-fast-moving-consumer-goods/,200,200,/plenary-session-four-agribusiness-and-fast-moving-consumer-goods/,preserved,
+/plenary-session-three-creative-industry/,200,200,/plenary-session-three-creative-industry/,preserved,
+/plenary-session-two-energy-power/,200,200,/plenary-session-two-energy-power/,preserved,
+/plenary-session-1-opening-plenary/,200,200,/plenary-session-1-opening-plenary/,preserved,
+/fon-roundtable-on-harnessing-the-entrepreneurial-potential-of-the-nigerian-diaspora-in-europe/,200,200,/fon-roundtable-on-harnessing-the-entrepreneurial-potential-of-the-nigerian-diaspora-in-europe/,preserved,
+/ccef-nigeria-qa-session-with-french-companies-and-investors-interested-in-nigeria/,200,200,/ccef-nigeria-qa-session-with-french-companies-and-investors-interested-in-nigeria/,preserved,
+/covid-19-information-the-5th-edition-of-spotlight-nigeria-moved-to-2021/,200,200,/covid-19-information-the-5th-edition-of-spotlight-nigeria-moved-to-2021/,preserved,
+/opportunities-in-the-european-economy-for-nigerian-companies/,200,200,/opportunities-in-the-european-economy-for-nigerian-companies/,preserved,
+/spotlight-nigeria-2018/,200,200,/spotlight-nigeria-2018/,preserved,
+/spotlight-nigeria-2018-will-highlight-investment-opportunities-between-franco-nigerian-investors/,200,200,/spotlight-nigeria-2018-will-highlight-investment-opportunities-between-franco-nigerian-investors/,preserved,
+/nigerian-creative-arts-exchange-takes-paris/,200,200,/nigerian-creative-arts-exchange-takes-paris/,preserved,
+/strengthening-franco-nigerian-ties-through-nigerian-cinema/,200,200,/strengthening-franco-nigerian-ties-through-nigerian-cinema/,preserved,
+/education-key-to-fostering-long-term-relations-between-nigeria-and-france/,200,200,/education-key-to-fostering-long-term-relations-between-nigeria-and-france/,preserved,
+/there-is-a-way-of-doing-business-in-nigeria-alec-fokapu/,200,200,/there-is-a-way-of-doing-business-in-nigeria-alec-fokapu/,preserved,
+/president-macron-to-visit-nigeria-strengthening-business-ties-between-france-and-nigeria/,200,200,/president-macron-to-visit-nigeria-strengthening-business-ties-between-france-and-nigeria/,preserved,
+/gallery/,200,200,/gallery/,preserved,
+/privacy-policy/,301,200,/privacy-policy/,preserved,
+/schedule-horizontal-tab/,200,308,/programme/,permanent,Theme demo page. Redirected to the programme page.
+/press-releases/,301,200,/press-releases/,preserved,
+/digital-conference/,200,308,/programme/,permanent,Theme demo page. Redirected to the programme page.
+/education-webinar/,200,308,/programme/,permanent,Theme demo page. Redirected to the programme page.
+/schedule-list/,200,308,/2023-programme2/,permanent,Demo schedule page; real 2023 schedule is on /2023-programme2/.
+/schedule-timeline/,200,308,/programme/,permanent,Theme demo page. Redirected to the programme page.
+/2023-programme2/,200,200,/2023-programme2/,preserved,
+/sponsorship-registration/,200,200,/sponsorship-registration/,preserved,
+/previous-editions/,301,200,/previous-editions/,preserved,
+/get-in-touch/,301,200,/get-in-touch/,preserved,
+/registration/,200,200,/registration/,preserved,
+/press-registration/,301,200,/press-registration/,preserved,
+/about/,301,200,/about/,preserved,
+/programme/,200,200,/programme/,preserved,
+/speakers/,200,200,/speakers/,preserved,
+/speakers/ralph-edwards/,200,308,/speakers/,permanent,Theme demo speaker. Redirected to the speakers archive.
+/speakers/ralph-edwards-2/,200,308,/speakers/,permanent,Theme demo speaker. Redirected to the speakers archive.
+/speakers/adebowale-adeyeye/,200,200,/speakers/adebowale-adeyeye/,preserved,
+/speakers/arnaud-floris/,200,200,/speakers/arnaud-floris/,preserved,
+/speakers/damien-de-la-rocque/,200,200,/speakers/damien-de-la-rocque/,preserved,
+/speakers/dr-steve-ogidan-mni/,200,200,/speakers/dr-steve-ogidan-mni/,preserved,
+/speakers/etienne-giros/,200,200,/speakers/etienne-giros/,preserved,
+/speakers/hon-abike-dabiri-erewa-oon/,200,200,/speakers/hon-abike-dabiri-erewa-oon/,preserved,
+/speakers/juliana-olayinka/,200,200,/speakers/juliana-olayinka/,preserved,
+/speakers/olanrewaju-boluwaji/,200,200,/speakers/olanrewaju-boluwaji/,preserved,
+/speakers/oluwajoba-oloba/,200,200,/speakers/oluwajoba-oloba/,preserved,
+/speakers/toyosi-ayodele/,200,200,/speakers/toyosi-ayodele/,preserved,
+/speakers/valor-iduh/,200,200,/speakers/valor-iduh/,preserved,
+/speakers/yves-battesti/,200,200,/speakers/yves-battesti/,preserved,
+/speakers/amb-tunde-mustapha/,200,200,/speakers/amb-tunde-mustapha/,preserved,
+/organizers/,200,308,/about/,permanent,Theme demo organizers. Redirected to About (organizer section).
+/organizers/andrew-beers/,200,308,/about/,permanent,Theme demo organizers. Redirected to About (organizer section).
+/organizers/kate-platonova/,200,308,/about/,permanent,Theme demo organizers. Redirected to About (organizer section).
+/events/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/marketing-strategy-for-small-business/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/future-of-geotechnics-technology-ai-big-data/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/create-a-business-model-to-grow-your-business/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/therapeutic-art-workshop/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/long-covid-rehab-the-long-road-to-recovery/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/health-and-wellness-with-antony-dolan/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/our-excellent-partner-france-pavilion/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/our-excellent-partner-france-pavilion-2/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/outside-lands-music-and-arts-festival/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/thursday-night-live-best-summer/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/our-excellent-partner-france-pavilion-3/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events/spotlight-nigeria-2023/,500,308,/2023-programme2/,permanent,Event CPT for the 2023 edition: content lives on the 2023 programme page.
+/hf_template/blog-sidebar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/title-single-blog/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/title-bar-cart-checkout/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/footer-2/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/speaker-single-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/banner-speaker-single/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/events-archive-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/404-page/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/title-bar-single-shop/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/title-bar-schedule/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/event-map-header/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/header-3/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/header-5/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/header-2/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/inner-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/footer-3/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/footer-5/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/footer-4/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/header-4/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/event-single-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/event-header/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/header-dark/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/headern/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/footer-cta/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/header/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/hf_template/footer/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/category/snfevent2018/,200,200,/category/snfevent2018/,preserved,
+/category/agriculture/,200,200,/category/agriculture/,preserved,
+/category/education/,200,200,/category/education/,preserved,
+/category/panels/,200,200,/category/panels/,preserved,
+/category/press-release/,200,200,/category/press-release/,preserved,
+/category/round-table/,200,200,/category/round-table/,preserved,
+/category/spotlight-nigeria-2018/,200,200,/category/spotlight-nigeria-2018/,preserved,
+/category/technology/,200,200,/category/technology/,preserved,
+/category/updates/,200,200,/category/updates/,preserved,
+/tag/campus-france/,200,200,/tag/campus-france/,preserved,
+/tag/diaspora/,200,200,/tag/diaspora/,preserved,
+/tag/education/,200,200,/tag/education/,preserved,
+/tag/france/,200,200,/tag/france/,preserved,
+/tag/france-nigeria-partnership/,200,200,/tag/france-nigeria-partnership/,preserved,
+/tag/franco-nigerian-ties/,200,200,/tag/franco-nigerian-ties/,preserved,
+/tag/friends-of-nigeria/,200,200,/tag/friends-of-nigeria/,preserved,
+/tag/friends-of-nigeria-europe/,200,200,/tag/friends-of-nigeria-europe/,preserved,
+/tag/macrons-visit-to-nigeria/,200,200,/tag/macrons-visit-to-nigeria/,preserved,
+/tag/nigeria/,200,200,/tag/nigeria/,preserved,
+/tag/nigerian-cinema/,200,200,/tag/nigerian-cinema/,preserved,
+/tag/nigerian-creative-arts-exchange/,200,200,/tag/nigerian-creative-arts-exchange/,preserved,
+/tag/nollywood/,200,200,/tag/nollywood/,preserved,
+/tag/nollywood-week/,200,200,/tag/nollywood-week/,preserved,
+/tag/october/,200,200,/tag/october/,preserved,
+/tag/paris/,200,200,/tag/paris/,preserved,
+/tag/snfevent2018/,200,200,/tag/snfevent2018/,preserved,
+/tag/spotlight-nigeria/,200,200,/tag/spotlight-nigeria/,preserved,
+/tag/spotlight-nigeria-2018/,200,200,/tag/spotlight-nigeria-2018/,preserved,
+/tag/spotlight-nigeria-france/,200,200,/tag/spotlight-nigeria-france/,preserved,
+/events_cat/art-craft/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_cat/business-marketing/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_cat/concert-festival/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_cat/education-training/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_cat/medical-health/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_cat/music-entertainment/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_cat/technology-innovation/,500,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_tag/conference/,200,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_tag/events/,200,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/events_tag/life-style/,200,308,/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/author/blueinctech/,200,200,/author/blueinctech/,preserved,
+/fr/france-to-boost-agribusiness-ties-in-nigeria/,200,200,/fr/france-to-boost-agribusiness-ties-in-nigeria/,preserved,
+/fr/spotlight-nigeria-investment-forum/,200,200,/fr/spotlight-nigeria-investment-forum/,preserved,
+/fr/spotlight-nigeria-2018-the-diaspora-effect/,200,200,/fr/spotlight-nigeria-2018-the-diaspora-effect/,preserved,
+/fr/plenary-session-six-digital-and-technology-taking-part-in-the-nigerian-silicon-valley-story-opportunities-for-foreign-investments-knowledge-sharing-and-strategic-partnerships/,200,200,/fr/plenary-session-six-digital-and-technology-taking-part-in-the-nigerian-silicon-valley-story-opportunities-for-foreign-investments-knowledge-sharing-and-strategic-partnerships/,preserved,
+/fr/plenary-session-five-real-estate-hospitality-and-construction/,200,200,/fr/plenary-session-five-real-estate-hospitality-and-construction/,preserved,
+/fr/plenary-session-four-agribusiness-and-fast-moving-consumer-goods/,200,200,/fr/plenary-session-four-agribusiness-and-fast-moving-consumer-goods/,preserved,
+/fr/plenary-session-three-creative-industry/,200,200,/fr/plenary-session-three-creative-industry/,preserved,
+/fr/plenary-session-two-energy-power/,200,200,/fr/plenary-session-two-energy-power/,preserved,
+/fr/plenary-session-1-opening-plenary/,200,200,/fr/plenary-session-1-opening-plenary/,preserved,
+/fr/fon-roundtable-on-harnessing-the-entrepreneurial-potential-of-the-nigerian-diaspora-in-europe/,200,200,/fr/fon-roundtable-on-harnessing-the-entrepreneurial-potential-of-the-nigerian-diaspora-in-europe/,preserved,
+/fr/ccef-nigeria-qa-session-with-french-companies-and-investors-interested-in-nigeria/,200,200,/fr/ccef-nigeria-qa-session-with-french-companies-and-investors-interested-in-nigeria/,preserved,
+/fr/covid-19-information-the-5th-edition-of-spotlight-nigeria-moved-to-2021/,200,200,/fr/covid-19-information-the-5th-edition-of-spotlight-nigeria-moved-to-2021/,preserved,
+/fr/opportunities-in-the-european-economy-for-nigerian-companies/,200,200,/fr/opportunities-in-the-european-economy-for-nigerian-companies/,preserved,
+/fr/spotlight-nigeria-2018/,200,200,/fr/spotlight-nigeria-2018/,preserved,
+/fr/spotlight-nigeria-2018-will-highlight-investment-opportunities-between-franco-nigerian-investors/,200,200,/fr/spotlight-nigeria-2018-will-highlight-investment-opportunities-between-franco-nigerian-investors/,preserved,
+/fr/nigerian-creative-arts-exchange-takes-paris/,200,200,/fr/nigerian-creative-arts-exchange-takes-paris/,preserved,
+/fr/strengthening-franco-nigerian-ties-through-nigerian-cinema/,200,200,/fr/strengthening-franco-nigerian-ties-through-nigerian-cinema/,preserved,
+/fr/education-key-to-fostering-long-term-relations-between-nigeria-and-france/,200,200,/fr/education-key-to-fostering-long-term-relations-between-nigeria-and-france/,preserved,
+/fr/there-is-a-way-of-doing-business-in-nigeria-alec-fokapu/,200,200,/fr/there-is-a-way-of-doing-business-in-nigeria-alec-fokapu/,preserved,
+/fr/president-macron-to-visit-nigeria-strengthening-business-ties-between-france-and-nigeria/,200,200,/fr/president-macron-to-visit-nigeria-strengthening-business-ties-between-france-and-nigeria/,preserved,
+/fr/gallery/,200,200,/fr/gallery/,preserved,
+/fr/privacy-policy/,301,200,/fr/privacy-policy/,preserved,
+/fr/schedule-horizontal-tab/,200,308,/fr/programme/,permanent,Theme demo page. Redirected to the programme page.
+/fr/press-releases/,301,200,/fr/press-releases/,preserved,
+/fr/digital-conference/,200,308,/fr/programme/,permanent,Theme demo page. Redirected to the programme page.
+/fr/education-webinar/,200,308,/fr/programme/,permanent,Theme demo page. Redirected to the programme page.
+/fr/schedule-list/,200,308,/fr/2023-programme2/,permanent,Demo schedule page; real 2023 schedule is on /2023-programme2/.
+/fr/schedule-timeline/,200,308,/fr/programme/,permanent,Theme demo page. Redirected to the programme page.
+/fr/2023-programme2/,200,200,/fr/2023-programme2/,preserved,
+/fr/sponsorship-registration/,200,200,/fr/sponsorship-registration/,preserved,
+/fr/previous-editions/,301,200,/fr/previous-editions/,preserved,
+/fr/get-in-touch/,301,200,/fr/get-in-touch/,preserved,
+/fr/registration/,301,200,/fr/registration/,preserved,
+/fr/press-registration/,301,200,/fr/press-registration/,preserved,
+/fr/about/,301,200,/fr/about/,preserved,
+/fr/programme/,200,200,/fr/programme/,preserved,
+/fr/speakers/,200,200,/fr/speakers/,preserved,
+/fr/speakers/ralph-edwards/,200,308,/fr/speakers/,permanent,Theme demo speaker. Redirected to the speakers archive.
+/fr/speakers/ralph-edwards-2/,200,308,/fr/speakers/,permanent,Theme demo speaker. Redirected to the speakers archive.
+/fr/speakers/adebowale-adeyeye/,200,200,/fr/speakers/adebowale-adeyeye/,preserved,
+/fr/speakers/arnaud-floris/,200,200,/fr/speakers/arnaud-floris/,preserved,
+/fr/speakers/damien-de-la-rocque/,200,200,/fr/speakers/damien-de-la-rocque/,preserved,
+/fr/speakers/dr-steve-ogidan-mni/,200,200,/fr/speakers/dr-steve-ogidan-mni/,preserved,
+/fr/speakers/etienne-giros/,200,200,/fr/speakers/etienne-giros/,preserved,
+/fr/speakers/hon-abike-dabiri-erewa-oon/,200,200,/fr/speakers/hon-abike-dabiri-erewa-oon/,preserved,
+/fr/speakers/juliana-olayinka/,200,200,/fr/speakers/juliana-olayinka/,preserved,
+/fr/speakers/olanrewaju-boluwaji/,200,200,/fr/speakers/olanrewaju-boluwaji/,preserved,
+/fr/speakers/oluwajoba-oloba/,200,200,/fr/speakers/oluwajoba-oloba/,preserved,
+/fr/speakers/toyosi-ayodele/,200,200,/fr/speakers/toyosi-ayodele/,preserved,
+/fr/speakers/valor-iduh/,200,200,/fr/speakers/valor-iduh/,preserved,
+/fr/speakers/yves-battesti/,200,200,/fr/speakers/yves-battesti/,preserved,
+/fr/speakers/amb-tunde-mustapha/,200,200,/fr/speakers/amb-tunde-mustapha/,preserved,
+/fr/organizers/,200,308,/fr/about/,permanent,Theme demo organizers. Redirected to About (organizer section).
+/fr/organizers/andrew-beers/,200,308,/fr/about/,permanent,Theme demo organizers. Redirected to About (organizer section).
+/fr/organizers/kate-platonova/,200,308,/fr/about/,permanent,Theme demo organizers. Redirected to About (organizer section).
+/fr/events/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/marketing-strategy-for-small-business/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/future-of-geotechnics-technology-ai-big-data/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/create-a-business-model-to-grow-your-business/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/therapeutic-art-workshop/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/long-covid-rehab-the-long-road-to-recovery/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/health-and-wellness-with-antony-dolan/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/our-excellent-partner-france-pavilion/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/our-excellent-partner-france-pavilion-2/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/outside-lands-music-and-arts-festival/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/thursday-night-live-best-summer/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/our-excellent-partner-france-pavilion-3/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events/spotlight-nigeria-2023/,500,308,/fr/2023-programme2/,permanent,Event CPT for the 2023 edition: content lives on the 2023 programme page.
+/fr/hf_template/blog-sidebar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/title-single-blog/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/title-bar-cart-checkout/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/footer-2/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/speaker-single-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/banner-speaker-single/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/events-archive-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/404-page/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/title-bar-single-shop/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/title-bar-schedule/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/event-map-header/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/header-3/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/header-5/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/header-2/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/inner-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/footer-3/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/footer-5/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/footer-4/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/header-4/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/event-single-title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/event-header/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/title-bar/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/header-dark/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/headern/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/footer-cta/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/header/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/hf_template/footer/,301,410,,gone,"Elementor header/footer template (theme internals, never a page). 410 Gone instead of the old blanket 301 to the homepage."
+/fr/category/snfevent2018/,200,200,/fr/category/snfevent2018/,preserved,
+/fr/category/agriculture/,200,200,/fr/category/agriculture/,preserved,
+/fr/category/education/,200,200,/fr/category/education/,preserved,
+/fr/category/panels/,200,200,/fr/category/panels/,preserved,
+/fr/category/press-release/,200,200,/fr/category/press-release/,preserved,
+/fr/category/round-table/,200,200,/fr/category/round-table/,preserved,
+/fr/category/spotlight-nigeria-2018/,200,200,/fr/category/spotlight-nigeria-2018/,preserved,
+/fr/category/technology/,200,200,/fr/category/technology/,preserved,
+/fr/category/updates/,200,200,/fr/category/updates/,preserved,
+/fr/tag/campus-france/,200,200,/fr/tag/campus-france/,preserved,
+/fr/tag/diaspora/,200,200,/fr/tag/diaspora/,preserved,
+/fr/tag/education/,200,200,/fr/tag/education/,preserved,
+/fr/tag/france/,200,200,/fr/tag/france/,preserved,
+/fr/tag/france-nigeria-partnership/,200,200,/fr/tag/france-nigeria-partnership/,preserved,
+/fr/tag/franco-nigerian-ties/,200,200,/fr/tag/franco-nigerian-ties/,preserved,
+/fr/tag/friends-of-nigeria/,200,200,/fr/tag/friends-of-nigeria/,preserved,
+/fr/tag/friends-of-nigeria-europe/,200,200,/fr/tag/friends-of-nigeria-europe/,preserved,
+/fr/tag/macrons-visit-to-nigeria/,200,200,/fr/tag/macrons-visit-to-nigeria/,preserved,
+/fr/tag/nigeria/,200,200,/fr/tag/nigeria/,preserved,
+/fr/tag/nigerian-cinema/,200,200,/fr/tag/nigerian-cinema/,preserved,
+/fr/tag/nigerian-creative-arts-exchange/,200,200,/fr/tag/nigerian-creative-arts-exchange/,preserved,
+/fr/tag/nollywood/,200,200,/fr/tag/nollywood/,preserved,
+/fr/tag/nollywood-week/,200,200,/fr/tag/nollywood-week/,preserved,
+/fr/tag/october/,200,200,/fr/tag/october/,preserved,
+/fr/tag/paris/,200,200,/fr/tag/paris/,preserved,
+/fr/tag/snfevent2018/,200,200,/fr/tag/snfevent2018/,preserved,
+/fr/tag/spotlight-nigeria/,200,200,/fr/tag/spotlight-nigeria/,preserved,
+/fr/tag/spotlight-nigeria-2018/,200,200,/fr/tag/spotlight-nigeria-2018/,preserved,
+/fr/tag/spotlight-nigeria-france/,200,200,/fr/tag/spotlight-nigeria-france/,preserved,
+/fr/events_cat/art-craft/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_cat/business-marketing/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_cat/concert-festival/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_cat/education-training/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_cat/medical-health/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_cat/music-entertainment/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_cat/technology-innovation/,500,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_tag/conference/,200,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_tag/events/,200,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/events_tag/life-style/,200,308,/fr/programme/,permanent,Theme demo event content (returned HTTP 500 on WordPress). Redirected to the programme page.
+/fr/author/blueinctech/,200,200,/fr/author/blueinctech/,preserved,
+/registration,301,308,/registration/,permanent,Missing trailing slash (WordPress served a duplicate 200).
+/new/sponsorship-registration/,301,308,/sponsorship-registration/,permanent,Legacy URL already redirected on WordPress; single hop kept.
+/fr/new/sponsorship-registration/,301,308,/fr/sponsorship-registration/,permanent,Legacy URL already redirected on WordPress; single hop kept.
+/2023/03/31/,200,200,/2023/03/31/,preserved,
+/2020/06/03/,200,200,/2020/06/03/,preserved,
+/2018/09/30/,200,200,/2018/09/30/,preserved,
+/2018/09/28/,200,200,/2018/09/28/,preserved,
+/2018/09/26/,200,200,/2018/09/26/,preserved,
+/press-releases/page/2/,200,200,/press-releases/page/2/,preserved,
+/fr,200,308,/fr/,permanent,Missing trailing slash (WordPress served a duplicate 200).
+/fr/2023/03/31/,200,200,/fr/2023/03/31/,preserved,
+/fr/2020/06/03/,200,200,/fr/2020/06/03/,preserved,
+/fr/2018/09/30/,200,200,/fr/2018/09/30/,preserved,
+/fr/2018/09/28/,200,200,/fr/2018/09/28/,preserved,
+/fr/2018/09/26/,200,200,/fr/2018/09/26/,preserved,
+/fr/press-releases/page/2/,200,200,/fr/press-releases/page/2/,preserved,
+/feed/,,200,/feed/,preserved,RSS feed recreated at the same URL.
+/fr/feed/,,200,/fr/feed/,preserved,RSS feed recreated at the same URL.
+/sitemap_index.xml,,308,/sitemap.xml,permanent,Yoast/WordPress sitemap URL (may be registered in Search Console).
+/wp-sitemap.xml,,308,/sitemap.xml,permanent,Yoast/WordPress sitemap URL (may be registered in Search Console).
+/REGISTRATION/,,301,/registration/,permanent,Uppercase variant normalised to the lowercase slug.
+/?s=test,,301,/search/,permanent,WordPress search.
+/page/2/,,404,,not found,
+/does-not-exist-xyz/,,404,,not found,
+/fr/does-not-exist-xyz/,,404,,not found,
+/index.php,,308,/,permanent,WordPress front controller.
+/en/*,,301,/*,permanent,Internal English prefix is never public; duplicates redirect to the unprefixed URL.
+/*/page/1/,,308,/*/,permanent,First page of a paginated archive.
+/category/uncategorized/,200,410,,gone,Empty default WordPress category.

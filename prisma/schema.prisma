@@ -1,0 +1,553 @@
+// Spotlight Nigeria CMS schema. See docs/DATABASE_SCHEMA.md for the reasoning behind each model.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────────────────────── Users & auth ─────────────────────────────
+
+enum Role {
+  ADMIN
+  EDITOR
+  AUTHOR
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(AUTHOR)
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions       Session[]
+  resetTokens    PasswordResetToken[]
+  pages          Page[]
+  posts          Post[]
+  media          MediaAsset[]
+  revisions      Revision[]
+  auditLogs      AuditLog[]
+}
+
+/// Server-side session. `id` is the SHA-256 hash of the random token kept in the cookie,
+/// so a database leak does not expose usable session tokens.
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  ip        String?
+  userAgent String?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id // SHA-256 hash of the emailed token
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+/// Fixed-window rate limiting shared by all app instances (login, forms, uploads).
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+}
+
+// ───────────────────────────── Content ─────────────────────────────
+
+enum Locale {
+  en
+  fr
+}
+
+enum ContentStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+model Page {
+  id                 String        @id @default(cuid())
+  /// Pages that are translations of each other share a translationGroup.
+  translationGroup   String
+  locale             Locale        @default(en)
+  title              String
+  slug               String
+  /// Full public path without locale prefix, e.g. "about" or "media/gallery" ("" = home page).
+  path               String
+  parentId           String?
+  parent             Page?         @relation("PageTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children           Page[]        @relation("PageTree")
+  excerpt            String?
+  featuredImageId    String?
+  featuredImage      MediaAsset?   @relation("PageFeaturedImage", fields: [featuredImageId], references: [id], onDelete: SetNull)
+  /// Structured block content, validated by src/lib/blocks/schema.ts.
+  blocks             Json          @default("[]")
+  status             ContentStatus @default(DRAFT)
+  /// Publication date. A PUBLISHED page with a future date is "scheduled".
+  publishedAt        DateTime?
+  menuOrder          Int           @default(0)
+  /// Layout chrome: "light" header (default) or "dark" header over a dark banner.
+  headerVariant      String        @default("light")
+  /// "default" green participant CTA footer, "seat" dark register band + newsletter, or "none".
+  footerVariant      String        @default("default")
+  seoTitle           String?
+  seoDescription     String?
+  canonicalUrl       String?
+  ogTitle            String?
+  ogDescription      String?
+  ogImageId          String?
+  ogImage            MediaAsset?   @relation("PageOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
+  noindex            Boolean       @default(false)
+  authorId           String?
+  author             User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  legacyId           Int?
+  legacyUrl          String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  /// Soft delete ("Trash"). Restorable until permanently deleted.
+  deletedAt          DateTime?
+
+  @@unique([locale, path])
+  @@unique([translationGroup, locale])
+  @@index([status, publishedAt])
+  @@index([deletedAt])
+}
+
+model Post {
+  id               String         @id @default(cuid())
+  translationGroup String
+  locale           Locale         @default(en)
+  title            String
+  slug             String
+  excerpt          String?
+  /// Sanitized HTML body (posts are article-shaped; pages use blocks).
+  content          String         @default("")
+  featuredImageId  String?
+  featuredImage    MediaAsset?    @relation("PostFeaturedImage", fields: [featuredImageId], references: [id], onDelete: SetNull)
+  status           ContentStatus  @default(DRAFT)
+  publishedAt      DateTime?
+  authorId         String?
+  author           User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  /// Byline shown publicly (WordPress showed "Spotlight Nigeria Press Team").
+  authorDisplayName String?
+  seoTitle         String?
+  seoDescription   String?
+  canonicalUrl     String?
+  ogTitle          String?
+  ogDescription    String?
+  ogImageId        String?
+  ogImage          MediaAsset?    @relation("PostOgImage", fields: [ogImageId], references: [id], onDelete: SetNull)
+  noindex          Boolean        @default(false)
+  categories       PostCategory[]
+  tags             PostTag[]
+  legacyId         Int?
+  legacyUrl        String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deletedAt        DateTime?
+
+  @@unique([locale, slug])
+  @@unique([translationGroup, locale])
+  @@index([status, publishedAt])
+  @@index([deletedAt])
+}
+
+model Category {
+  id          String         @id @default(cuid())
+  slug        String         @unique
+  name        String
+  nameFr      String?
+  description String?
+  legacyId    Int?           @unique
+  posts       PostCategory[]
+}
+
+model Tag {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  nameFr   String?
+  legacyId Int?      @unique
+  posts    PostTag[]
+}
+
+model PostCategory {
+  postId     String
+  categoryId String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([postId, categoryId])
+  @@index([categoryId])
+}
+
+model PostTag {
+  postId String
+  tagId  String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([postId, tagId])
+  @@index([tagId])
+}
+
+enum RevisionKind {
+  REVISION
+  AUTOSAVE
+}
+
+enum EntityType {
+  PAGE
+  POST
+  EVENT
+  SPEAKER
+  PARTNER
+  TESTIMONIAL
+  MEDIA
+  MENU
+  SETTINGS
+  USER
+  REDIRECT
+  SUBMISSION
+}
+
+/// Snapshot of a page/post. AUTOSAVE rows hold unsaved editor state (one per user + entity).
+model Revision {
+  id         String       @id @default(cuid())
+  entityType EntityType
+  entityId   String
+  kind       RevisionKind @default(REVISION)
+  data       Json
+  authorId   String?
+  author     User?        @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  note       String?
+  createdAt  DateTime     @default(now())
+
+  @@index([entityType, entityId, createdAt])
+}
+
+// ───────────────────────────── Media ─────────────────────────────
+
+model MediaAsset {
+  id           String       @id @default(cuid())
+  /// Object key in the storage bucket, e.g. "2023/08/hero-1a2b3c.jpg".
+  storageKey   String       @unique
+  filename     String
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  title        String?
+  alt          String       @default("")
+  altFr        String?
+  caption      String?
+  description  String?
+  sha256       String?
+  uploadedById String?
+  uploadedBy   User?        @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  legacyId     Int?         @unique
+  legacyUrl    String?      @unique
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  usages            MediaUsage[]
+  pageFeatured      Page[]        @relation("PageFeaturedImage")
+  pageOg            Page[]        @relation("PageOgImage")
+  postFeatured      Post[]        @relation("PostFeaturedImage")
+  postOg            Post[]        @relation("PostOgImage")
+  speakerPhotos     Speaker[]
+  partnerLogos      Partner[]
+  testimonialPhotos Testimonial[] @relation("TestimonialPhoto")
+  testimonialLogos  Testimonial[] @relation("TestimonialLogo")
+  eventBanners      Event[]
+
+  @@index([mimeType])
+  @@index([createdAt])
+}
+
+/// Where a media asset is referenced. Rebuilt whenever the referencing record is saved,
+/// so the library can block deleting assets that are still in use.
+model MediaUsage {
+  mediaId    String
+  media      MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  entityType EntityType
+  entityId   String
+  label      String
+
+  @@id([mediaId, entityType, entityId])
+  @@index([entityType, entityId])
+}
+
+// ───────────────────────────── Navigation ─────────────────────────────
+
+model Menu {
+  id        String     @id @default(cuid())
+  /// Placement key: "header", "footer-1", "footer-2", "footer-3".
+  location  String
+  locale    Locale
+  /// Admin name; for footer menus also the column heading shown publicly.
+  name      String
+  items     MenuItem[]
+  updatedAt DateTime   @updatedAt
+
+  @@unique([location, locale])
+}
+
+model MenuItem {
+  id           String     @id @default(cuid())
+  menuId       String
+  menu         Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  parentId     String?
+  parent       MenuItem?  @relation("MenuTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children     MenuItem[] @relation("MenuTree")
+  label        String
+  /// Custom URL ("#" for a non-clickable dropdown parent). Ignored when pageGroup is set.
+  url          String?
+  /// Link to a page by translation group, so the link follows the page's current path in each language.
+  pageGroup    String?
+  order        Int        @default(0)
+  openInNewTab Boolean    @default(false)
+  visible      Boolean    @default(true)
+
+  @@index([menuId, parentId, order])
+}
+
+// ───────────────────────────── Events ─────────────────────────────
+
+model Event {
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  title           String
+  titleFr         String?
+  edition         Int?
+  year            Int
+  startsAt        DateTime?
+  endsAt          DateTime?
+  timezone        String          @default("Europe/Paris")
+  venueName       String?
+  venueAddress    String?
+  theme           String?
+  themeFr         String?
+  description     String?
+  descriptionFr   String?
+  registrationUrl String?
+  status          ContentStatus   @default(DRAFT)
+  /// The edition promoted across the site (hero, countdown, footer CTA).
+  isCurrent       Boolean         @default(false)
+  bannerId        String?
+  banner          MediaAsset?     @relation(fields: [bannerId], references: [id], onDelete: SetNull)
+  galleryIds      String[]        @default([])
+  sessions        EventSession[]
+  partners        EventPartner[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([year])
+}
+
+model EventSession {
+  id            String           @id @default(cuid())
+  eventId       String
+  event         Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  day           Int              @default(1)
+  /// Local times as displayed ("08:30"), interpreted in the event timezone.
+  startTime     String?
+  endTime       String?
+  title         String
+  titleFr       String?
+  theme         String?
+  themeFr       String?
+  description   String?
+  descriptionFr String?
+  location      String?
+  kind          String           @default("session") // session | plenary | panel | break | networking
+  order         Int              @default(0)
+  speakers      SessionSpeaker[]
+
+  @@index([eventId, day, order])
+}
+
+enum SessionRole {
+  SPEAKER
+  MODERATOR
+  PANELIST
+  KEYNOTE
+}
+
+model SessionSpeaker {
+  sessionId String
+  speakerId String
+  session   EventSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  speaker   Speaker      @relation(fields: [speakerId], references: [id], onDelete: Cascade)
+  role      SessionRole  @default(SPEAKER)
+  order     Int          @default(0)
+
+  @@id([sessionId, speakerId])
+}
+
+model Speaker {
+  id           String           @id @default(cuid())
+  slug         String           @unique
+  name         String
+  jobTitle     String?
+  jobTitleFr   String?
+  organization String?
+  bio          String?
+  bioFr        String?
+  photoId      String?
+  photo        MediaAsset?      @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  website      String?
+  linkedin     String?
+  twitter      String?
+  order        Int              @default(0)
+  published    Boolean          @default(true)
+  legacyUrl    String?
+  sessions     SessionSpeaker[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+enum PartnerTier {
+  CO_ORGANIZER
+  SUPPORTER
+  SPONSOR
+  PARTNER
+  MEDIA_PARTNER
+}
+
+model Partner {
+  id         String         @id @default(cuid())
+  slug       String         @unique
+  name       String
+  logoId     String?
+  logo       MediaAsset?    @relation(fields: [logoId], references: [id], onDelete: SetNull)
+  websiteUrl String?
+  /// Default grouping when shown outside an event context.
+  tier       PartnerTier    @default(PARTNER)
+  order      Int            @default(0)
+  published  Boolean        @default(true)
+  events     EventPartner[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model EventPartner {
+  eventId   String
+  partnerId String
+  event     Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  partner   Partner     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  tier      PartnerTier
+  order     Int         @default(0)
+
+  @@id([eventId, partnerId])
+}
+
+model Testimonial {
+  id           String      @id @default(cuid())
+  quote        String
+  quoteFr      String?
+  name         String
+  role         String?
+  roleFr       String?
+  organization String?
+  photoId      String?
+  photo        MediaAsset? @relation("TestimonialPhoto", fields: [photoId], references: [id], onDelete: SetNull)
+  logoId       String?
+  logo         MediaAsset? @relation("TestimonialLogo", fields: [logoId], references: [id], onDelete: SetNull)
+  order        Int         @default(0)
+  visible      Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+// ───────────────────────────── Forms ─────────────────────────────
+
+enum SubmissionStatus {
+  NEW
+  READ
+  ARCHIVED
+  SPAM
+}
+
+model FormSubmission {
+  id          String           @id @default(cuid())
+  /// "contact" | "sponsorship" | "report-download" | "press" | "newsletter"
+  formKey     String
+  locale      Locale           @default(en)
+  name        String?
+  email       String?
+  data        Json
+  status      SubmissionStatus @default(NEW)
+  /// SHA-256 of IP + secret, for abuse investigation without storing raw IPs.
+  ipHash      String?
+  userAgent   String?
+  notifiedAt  DateTime?
+  notifyError String?
+  /// Number of email delivery attempts handed to the provider (retries stop after 5).
+  notifyAttempts      Int       @default(0)
+  /// When the last attempt started; also used as a short lock so two workers never send twice.
+  notifyLastAttemptAt DateTime?
+  /// Hash of form + sender + answers + 10-minute window: an identical resubmission is not stored twice.
+  dedupeKey   String?          @unique
+  createdAt   DateTime         @default(now())
+
+  @@index([formKey, createdAt])
+  @@index([status])
+  @@index([notifiedAt, notifyAttempts])
+}
+
+// ───────────────────────────── Site ─────────────────────────────
+
+/// Validated settings documents (see src/lib/settings.ts). One row per key.
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+}
+
+model Redirect {
+  id         String   @id @default(cuid())
+  /// Path including leading and trailing slash, e.g. "/events/".
+  fromPath   String   @unique
+  /// Target path or absolute URL. Empty for 410 Gone.
+  toPath     String   @default("")
+  statusCode Int      @default(301)
+  hits       Int      @default(0)
+  note       String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  userId     String?
+  user       User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  entityType EntityType?
+  entityId   String?
+  summary    String
+  meta       Json?
+  createdAt  DateTime    @default(now())
+
+  @@index([createdAt])
+  @@index([entityType, entityId])
+}
