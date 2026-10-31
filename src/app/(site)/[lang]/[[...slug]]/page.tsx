@@ -41,6 +41,13 @@ function alternatesMeta(alts: { locale: Locale; href: string }[], self: string) 
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
+  const [meta, settings] = await Promise.all([pageMetadata(props), getAllSettings()]);
+  // Page metadata replaces the layout's `robots`, so the site-wide "Discourage search engines"
+  // switch (staging copies) is applied here and always wins.
+  return settings.seo.discourageIndexing ? { ...meta, robots: { index: false, follow: false } } : meta;
+}
+
+async function pageMetadata(props: Props): Promise<Metadata> {
   const { locale, r, segs } = await resolve(props);
   const settings = await getAllSettings();
   const selfPath = localizePath(segs.join("/"), locale);

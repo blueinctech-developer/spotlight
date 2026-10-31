@@ -13,10 +13,27 @@ const stamp = Date.now().toString(36);
 async function signIn(page: Page) {
   await page.goto("/admin/login/");
   await page.getByLabel("Email").fill(email!);
-  await page.getByLabel("Password").fill(password!);
+  await page.getByLabel("Password", { exact: true }).fill(password!);
   await page.getByRole("button", { name: "Sign in" }).click();
   await expect(page).toHaveURL(/\/admin\/$/);
 }
+
+test.describe("CMS sign-in page", () => {
+  test("the password can be shown and hidden again", async ({ page }) => {
+    await page.goto("/admin/login/");
+    const field = page.getByLabel("Password", { exact: true });
+    await field.fill("secret-value-1");
+    await expect(field).toHaveAttribute("type", "password");
+    await page.getByRole("button", { name: "Show password" }).click();
+    await expect(field).toHaveAttribute("type", "text");
+    const hide = page.getByRole("button", { name: "Hide password" });
+    await expect(hide).toHaveAttribute("aria-pressed", "true");
+    await hide.click();
+    await expect(field).toHaveAttribute("type", "password");
+    await expect(field).toHaveValue("secret-value-1"); // toggling never clears or submits
+    await expect(page).toHaveURL(/\/admin\/login\/$/);
+  });
+});
 
 test.describe("CMS security", () => {
   test("admin pages require sign-in and are not indexable", async ({ request, page }) => {
@@ -43,7 +60,7 @@ test.describe("CMS security", () => {
   test("wrong password is rejected with a generic message", async ({ page }) => {
     await page.goto("/admin/login/");
     await page.getByLabel("Email").fill("nobody@example.test");
-    await page.getByLabel("Password").fill("not-the-password-123");
+    await page.getByLabel("Password", { exact: true }).fill("not-the-password-123");
     await page.getByRole("button", { name: "Sign in" }).click();
     await expect(page.getByText(/Incorrect email or password|Too many sign-in attempts/)).toBeVisible();
   });

@@ -1,0 +1,16 @@
+# Never upload these when deploying from a local folder with the Vercel CLI.
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+.neon
+# Local database, uploads, dev credentials, logs
+.data/
+# Caches and build output (Vercel builds from source)
+node_modules/
+.next/
+migration/cache/
+test-results/
+playwright-report/
+src/generated/
+*.tsbuildinfo

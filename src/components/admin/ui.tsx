@@ -4,13 +4,13 @@
  * Admin UI kit: small, accessible primitives in the shadcn/ui style (Radix underneath).
  * Visual language: neutral zinc surfaces, brand green for primary actions, 8px radius.
  */
-import { forwardRef, useId, type ComponentProps, type ReactNode } from "react";
+import { forwardRef, useId, useState, type ComponentProps, type ReactNode } from "react";
 import { Dialog as RDialog, DropdownMenu as RDropdown, Switch as RSwitch, Tooltip as RTooltip } from "radix-ui";
 import type { VariantProps } from "class-variance-authority";
 import { badgeVariants, buttonVariants, cn, effectiveStatus, STATUS_LABELS, STATUS_TONES } from "./ui-shared";
 
 export { badgeVariants, buttonVariants, cn, effectiveStatus, STATUS_LABELS, STATUS_TONES };
-import { Loader2, X } from "lucide-react";
+import { Eye, EyeOff, Loader2, X } from "lucide-react";
 
 
 // ───────── Button ─────────
@@ -36,6 +36,34 @@ const control =
 
 export const Input = forwardRef<HTMLInputElement, ComponentProps<"input">>(function Input({ className, ...props }, ref) {
   return <input ref={ref} className={cn(control, "h-9", className)} {...props} />;
+});
+/**
+ * Password field with a show/hide toggle. The eye button is a real button (keyboard and
+ * screen-reader friendly) and never submits the form.
+ */
+export const PasswordInput = forwardRef<HTMLInputElement, Omit<ComponentProps<"input">, "type">>(function PasswordInput(
+  { className, id, ...props },
+  ref,
+) {
+  const [visible, setVisible] = useState(false);
+  const fallbackId = useId();
+  const inputId = id ?? fallbackId;
+  return (
+    <div className="relative">
+      <input ref={ref} id={inputId} type={visible ? "text" : "password"} className={cn(control, "h-9 pr-10", className)} {...props} />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        aria-label={visible ? "Hide password" : "Show password"}
+        aria-pressed={visible}
+        aria-controls={inputId}
+        title={visible ? "Hide password" : "Show password"}
+        className="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-r-lg text-zinc-500 transition-colors hover:text-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand/50"
+      >
+        {visible ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
+      </button>
+    </div>
+  );
 });
 export const Textarea = forwardRef<HTMLTextAreaElement, ComponentProps<"textarea">>(function Textarea({ className, ...props }, ref) {
   return <textarea ref={ref} className={cn(control, "min-h-[84px] py-2 leading-relaxed", className)} {...props} />;

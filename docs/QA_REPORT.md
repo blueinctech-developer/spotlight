@@ -79,6 +79,8 @@ The full requirement-by-requirement status is in [COMPLIANCE_MATRIX.md](COMPLIAN
 | 22 | P2 (perf) | Cookie banner appeared only after hydration and became the late LCP element (render delay about 3.4 s on mobile) | Server-rendered banner, hidden before paint for returning visitors | Lighthouse before/after |
 | 23 | P3 (SEO) | No `WebSite`/`BreadcrumbList` structured data (the old site had them through Yoast); relative event offer URL; one speaker without a meta description | Added; absolute URL; fallback description | e2e |
 | 24 | P2 (responsive) | Between 1024 and about 1140 px, menu labels wrapped ("About Us", "À propos de nous") and the header grew from 120 px to up to 300 px. The long French sponsor button ran off-screen at 390, 1024 and 1280 px (pre-existing). Found while you viewed the site | Labels never wrap; slightly tighter spacing below 1340 px; long button labels wrap onto two balanced lines; original button height kept | e2e (1024–1366 px, EN/FR) + header screenshots |
+| 25 | P2 (SEO) | "Discourage search engines" only reached robots.txt: each page's own metadata replaced the layout's `robots` value, so pages carried no `noindex` (found while testing the Vercel staging copy) | The site-wide switch is applied last in page metadata and always wins | local on/off check + live staging page shows `noindex, nofollow` |
+| 26 | UX | No way to check a typed password on the sign-in, setup and reset screens (requested) | Show/hide toggle (keyboard accessible, "Show/Hide password" labels, `aria-pressed`) | e2e |
 
 ## 3. Visual comparison
 

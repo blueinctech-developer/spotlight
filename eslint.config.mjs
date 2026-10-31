@@ -27,6 +27,7 @@ const eslintConfig = defineConfig([
     "migration/cache/**",
     // Stand-alone CommonJS audit tools run with plain `node` (see scripts/audit/README.md).
     "scripts/audit/**",
+    "scripts/with-env.cjs",
   ]),
 ]);
 

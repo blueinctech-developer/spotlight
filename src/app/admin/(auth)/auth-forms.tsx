@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useActionState } from "react";
-import { Button, Field, Input } from "@/components/admin/ui";
+import { Button, Field, Input, PasswordInput } from "@/components/admin/ui";
 import { login, requestPasswordReset, resetPassword, setupFirstAdmin, type FormState } from "@/app/admin/actions/auth";
 
 export function AuthCard({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
@@ -37,7 +37,7 @@ export function LoginForm({ next, notice }: { next?: string; notice?: string }) 
       <Alert state={state} />
       <input type="hidden" name="next" value={next ?? ""} />
       <Field label="Email">{(p) => <Input {...p} name="email" type="email" autoComplete="username" required autoFocus />}</Field>
-      <Field label="Password">{(p) => <Input {...p} name="password" type="password" autoComplete="current-password" required />}</Field>
+      <Field label="Password">{(p) => <PasswordInput {...p} name="password" autoComplete="current-password" required />}</Field>
       <Button type="submit" variant="primary" className="w-full" loading={pending}>Sign in</Button>
       <p className="text-center text-sm">
         <Link href="/admin/reset-password/" className="text-zinc-500 hover:text-zinc-800">Forgot your password?</Link>
@@ -60,9 +60,9 @@ export function SetupForm({ needsToken }: { needsToken: boolean }) {
       <Field label="Your name" error={fe.name}>{(p) => <Input {...p} name="name" required autoComplete="name" />}</Field>
       <Field label="Email" error={fe.email}>{(p) => <Input {...p} name="email" type="email" required autoComplete="email" />}</Field>
       <Field label="Password" hint="At least 12 characters, mixing letters with numbers or symbols." error={fe.password}>
-        {(p) => <Input {...p} name="password" type="password" required autoComplete="new-password" />}
+        {(p) => <PasswordInput {...p} name="password" required autoComplete="new-password" />}
       </Field>
-      <Field label="Confirm password" error={fe.confirm}>{(p) => <Input {...p} name="confirm" type="password" required autoComplete="new-password" />}</Field>
+      <Field label="Confirm password" error={fe.confirm}>{(p) => <PasswordInput {...p} name="confirm" required autoComplete="new-password" />}</Field>
       <Button type="submit" variant="primary" className="w-full" loading={pending}>Create administrator</Button>
     </form>
   );
@@ -87,9 +87,9 @@ export function ResetForm({ token }: { token: string }) {
       <Alert state={state} />
       <input type="hidden" name="token" value={token} />
       <Field label="New password" hint="At least 12 characters, mixing letters with numbers or symbols.">
-        {(p) => <Input {...p} name="password" type="password" required autoComplete="new-password" />}
+        {(p) => <PasswordInput {...p} name="password" required autoComplete="new-password" />}
       </Field>
-      <Field label="Confirm new password">{(p) => <Input {...p} name="confirm" type="password" required autoComplete="new-password" />}</Field>
+      <Field label="Confirm new password">{(p) => <PasswordInput {...p} name="confirm" required autoComplete="new-password" />}</Field>
       <Button type="submit" variant="primary" className="w-full" loading={pending}>Set new password</Button>
     </form>
   );
