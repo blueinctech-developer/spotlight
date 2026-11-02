@@ -22,7 +22,7 @@ const TABS = [
 ] as const;
 type TabId = (typeof TABS)[number]["id"];
 
-export function EventEditor({ details, sessions, partners }: { details: EventDetails; sessions: SessionDraft[]; partners: EventPartnerDraft[] }) {
+export function EventEditor({ details, sessions, hiddenDays, partners }: { details: EventDetails; sessions: SessionDraft[]; hiddenDays: number[]; partners: EventPartnerDraft[] }) {
   const [tab, setTab] = useState<TabId>("details");
   const [dirty, setDirty] = useState<Record<TabId, boolean>>({ details: false, programme: false, partners: false });
   const anyDirty = Object.values(dirty).some(Boolean);
@@ -52,7 +52,7 @@ export function EventEditor({ details, sessions, partners }: { details: EventDet
       </div>
       {/* Tabs stay mounted so switching never loses unsaved edits. */}
       <div hidden={tab !== "details"}><DetailsForm initial={details} onDirty={markDirty("details")} /></div>
-      <div hidden={tab !== "programme"}><ProgrammeEditor eventId={details.id} initial={sessions} onDirty={markDirty("programme")} /></div>
+      <div hidden={tab !== "programme"}><ProgrammeEditor eventId={details.id} initial={sessions} initialHiddenDays={hiddenDays} onDirty={markDirty("programme")} /></div>
       <div hidden={tab !== "partners"}><EventPartnersEditor eventId={details.id} initial={partners} onDirty={markDirty("partners")} /></div>
     </div>
   );

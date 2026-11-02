@@ -189,7 +189,9 @@ export async function loadBlockData(blocks: Block[], locale: Locale): Promise<Bl
       ? db.event.findMany({
           where: { id: { in: refs.events }, status: { in: ["PUBLISHED", "ARCHIVED"] } },
           include: {
+            // Hidden sessions never leave the server; hidden days are dropped below.
             sessions: {
+              where: { hidden: false },
               orderBy: [{ day: "asc" }, { order: "asc" }],
               include: { speakers: { orderBy: { order: "asc" }, include: { speaker: { select: speakerSelect } } } },
             },
@@ -223,7 +225,7 @@ export async function loadBlockData(blocks: Block[], locale: Locale): Promise<Bl
           startsAt: e.startsAt,
           venueName: e.venueName,
           venueAddress: e.venueAddress,
-          sessions: e.sessions.map((s) => ({
+          sessions: e.sessions.filter((s) => !e.hiddenDays.includes(s.day)).map((s) => ({
             id: s.id,
             day: s.day,
             startTime: s.startTime,
@@ -408,6 +410,7 @@ export const getPublishedSpeaker = cache(async (locale: Locale, slug: string) =>
   });
   const sessions = speaker.sessions
     .filter((s) => s.session.event.status === "PUBLISHED" || s.session.event.status === "ARCHIVED")
+    .filter((s) => !s.session.hidden && !s.session.event.hiddenDays.includes(s.session.day))
     .map((s) => ({
       id: s.session.id,
       day: s.session.day,

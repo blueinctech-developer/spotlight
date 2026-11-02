@@ -125,6 +125,7 @@ const sessionInput = z.object({
   descriptionFr: z.string().max(50_000).default(""),
   location: optText(300),
   kind: z.enum(["session", "plenary", "panel", "break", "networking"]),
+  hidden: z.boolean().default(false),
   speakers: z
     .array(z.object({
       speakerId: z.string(),
@@ -138,8 +139,13 @@ const sessionInput = z.object({
 /** Replace the whole programme of an event atomically (order = position within each day). */
 export const saveSessions = adminAction(
   "events.manage",
-  z.object({ eventId: z.string(), sessions: z.array(sessionInput).max(300) }),
-  async ({ eventId, sessions }, user) => {
+  z.object({
+    eventId: z.string(),
+    sessions: z.array(sessionInput).max(300),
+    /** Days kept in the CMS but not shown publicly. */
+    hiddenDays: z.array(z.number().int().min(1).max(30)).max(30).default([]),
+  }),
+  async ({ eventId, sessions, hiddenDays }, user) => {
     const event = await db.event.findUnique({ where: { id: eventId }, select: { title: true } });
     if (!event) throw new UserError("Event not found.");
     const speakerIds = [...new Set(sessions.flatMap((s) => s.speakers.map((x) => x.speakerId)))];
@@ -156,7 +162,7 @@ export const saveSessions = adminAction(
         dayCounters.set(s.day, order + 1);
         const data = {
           day: s.day, order, startTime: s.startTime, endTime: s.endTime, title: s.title, titleFr: s.titleFr,
-          theme: s.theme, themeFr: s.themeFr, location: s.location, kind: s.kind,
+          theme: s.theme, themeFr: s.themeFr, location: s.location, kind: s.kind, hidden: s.hidden,
           description: sanitizeRichText(s.description) || null,
           descriptionFr: sanitizeRichText(s.descriptionFr) || null,
         };
@@ -170,6 +176,9 @@ export const saveSessions = adminAction(
           await tx.sessionSpeaker.createMany({ data: unique.map((x, i) => ({ sessionId: row.id, speakerId: x.speakerId, role: x.role, label: x.label, labelFr: x.labelFr, order: i })) });
         }
       }
+      // Only remember hidden days that still have sessions.
+      const days = new Set(sessions.map((s) => s.day));
+      await tx.event.update({ where: { id: eventId }, data: { hiddenDays: [...new Set(hiddenDays)].filter((d) => days.has(d)).sort((a, b) => a - b) } });
     });
     await audit({ userId: user.id, action: "event.programme", entityType: "EVENT", entityId: eventId, summary: `Saved programme of ${event.title} (${sessions.length} sessions)` });
     revalidatePublic();

@@ -62,6 +62,7 @@ export default async function EventEditPage(props: PageProps<"/admin/events/[id]
     description: s.description ?? "",
     descriptionFr: s.descriptionFr ?? "",
     location: s.location ?? "",
+    hidden: s.hidden,
     kind: (["session", "plenary", "panel", "break", "networking"].includes(s.kind) ? s.kind : "session") as SessionKind,
     speakers: s.speakers.map((sp) => ({
       role: sp.role as SessionRole,
@@ -97,7 +98,7 @@ export default async function EventEditPage(props: PageProps<"/admin/events/[id]
           </span>
         }
       />
-      <EventEditor details={details} sessions={sessions} partners={partners} />
+      <EventEditor details={details} sessions={sessions} hiddenDays={event.hiddenDays} partners={partners} />
     </>
   );
 }

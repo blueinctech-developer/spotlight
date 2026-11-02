@@ -19,6 +19,8 @@ export type SessionDraft = {
   descriptionFr: string;
   location: string;
   kind: SessionKind;
+  /** Kept in the CMS but not shown on the public site. */
+  hidden: boolean;
   /** `label` (optional) replaces the role name on the public card; the role still sets its colour. */
   speakers: { speaker: SpeakerOption; role: SessionRole; label: string; labelFr: string }[];
 };

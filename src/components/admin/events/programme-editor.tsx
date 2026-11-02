@@ -3,10 +3,10 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowDown, ArrowUp, CalendarPlus, Clock, Copy, MapPin, MoreHorizontal, Pencil, Plus, Trash2, X } from "lucide-react";
+import { ArrowDown, ArrowUp, CalendarPlus, Clock, Copy, Eye, EyeOff, MapPin, MoreHorizontal, Pencil, Plus, Trash2, X } from "lucide-react";
 import { saveSessions } from "@/app/admin/actions/events";
 import {
-  Badge, Button, Card, ConfirmDialog, Dialog, DropdownContent, DropdownItem, DropdownMenu, DropdownSeparator, DropdownTrigger, EmptyState, Field, Input, Select,
+  Badge, Button, Card, ConfirmDialog, Dialog, DropdownContent, DropdownItem, DropdownMenu, DropdownSeparator, DropdownTrigger, EmptyState, Field, Input, Select, Switch,
 } from "@/components/admin/ui";
 import { RichTextEditor } from "@/components/admin/rich-text";
 import { SortableList, moveItem } from "./sortable";
@@ -18,17 +18,25 @@ const newKey = () => `new-${Date.now()}-${keySeq++}`;
 
 const emptySession = (day: number): SessionDraft => ({
   key: newKey(), day, startTime: "", endTime: "", title: "", titleFr: "", theme: "", themeFr: "",
-  description: "", descriptionFr: "", location: "", kind: "session", speakers: [],
+  description: "", descriptionFr: "", location: "", kind: "session", hidden: false, speakers: [],
 });
 
-export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string; initial: SessionDraft[]; onDirty: (v: boolean) => void }) {
+export function ProgrammeEditor({
+  eventId, initial, initialHiddenDays, onDirty,
+}: { eventId: string; initial: SessionDraft[]; initialHiddenDays: number[]; onDirty: (v: boolean) => void }) {
   const router = useRouter();
   const [sessions, setSessions] = useState(initial);
   const [saved, setSaved] = useState(initial);
+  // Days hidden from the public site (their sessions stay here, greyed out).
+  const [hiddenDays, setHiddenDays] = useState(initialHiddenDays);
+  const [savedHiddenDays, setSavedHiddenDays] = useState(initialHiddenDays);
   const [editing, setEditing] = useState<SessionDraft | null>(null);
   const [deleting, setDeleting] = useState<SessionDraft | null>(null);
   const [pending, start] = useTransition();
-  const dirty = useMemo(() => JSON.stringify(sessions) !== JSON.stringify(saved), [sessions, saved]);
+  const dirty = useMemo(
+    () => JSON.stringify(sessions) !== JSON.stringify(saved) || JSON.stringify([...hiddenDays].sort()) !== JSON.stringify([...savedHiddenDays].sort()),
+    [sessions, saved, hiddenDays, savedHiddenDays],
+  );
   useEffect(() => onDirty(dirty), [dirty, onDirty]);
 
   const days = useMemo(() => {
@@ -57,6 +65,9 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
     });
   };
 
+  const toggleDay = (day: number) => setHiddenDays((d) => (d.includes(day) ? d.filter((x) => x !== day) : [...d, day]));
+  const toggleHidden = (s: SessionDraft) => setSessions((list) => list.map((x) => (x.key === s.key ? { ...x, hidden: !x.hidden } : x)));
+
   const duplicate = (s: SessionDraft) => {
     const copy = { ...s, key: newKey(), dbId: undefined, title: `${s.title} (copy)` };
     setSessions((list) => {
@@ -74,12 +85,14 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
         sessions: sessions.map((s) => ({
           id: s.dbId, day: s.day, startTime: s.startTime, endTime: s.endTime, title: s.title, titleFr: s.titleFr,
           theme: s.theme, themeFr: s.themeFr, description: s.description, descriptionFr: s.descriptionFr,
-          location: s.location, kind: s.kind, speakers: s.speakers.map((x) => ({ speakerId: x.speaker.id, role: x.role, label: x.label, labelFr: x.labelFr })),
+          location: s.location, kind: s.kind, hidden: s.hidden, speakers: s.speakers.map((x) => ({ speakerId: x.speaker.id, role: x.role, label: x.label, labelFr: x.labelFr })),
         })),
+        hiddenDays,
       });
       if (!res.ok) return void toast.error(res.error);
       toast.success("Programme saved");
       setSaved(sessions);
+      setSavedHiddenDays(hiddenDays);
       router.refresh();
     });
 
@@ -91,7 +104,7 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
         </p>
         <div className="flex gap-2">
           <Button onClick={() => setEditing(emptySession(Math.max(...days) + (sessions.length ? 1 : 0)))}><CalendarPlus /> Add day</Button>
-          {dirty && <Button onClick={() => setSessions(saved)}>Discard</Button>}
+          {dirty && <Button onClick={() => { setSessions(saved); setHiddenDays(savedHiddenDays); }}>Discard</Button>}
           <Button variant="primary" loading={pending} disabled={!dirty} onClick={save}>Save programme</Button>
         </div>
       </div>
@@ -108,18 +121,27 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
       ) : (
         days.map((day) => {
           const list = byDay(day);
+          const dayHidden = hiddenDays.includes(day);
           return (
             <Card key={day}>
-              <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-3">
-                <h2 className="text-sm font-semibold text-zinc-900">Day {day}</h2>
-                <Button size="sm" variant="ghost" onClick={() => setEditing(emptySession(day))}><Plus /> Add session</Button>
+              <div className={`flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 px-5 py-3 ${dayHidden ? "bg-zinc-50" : ""}`}>
+                <h2 className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
+                  Day {day}
+                  {dayHidden && <Badge tone="amber"><EyeOff className="size-3" /> Hidden from public page</Badge>}
+                </h2>
+                <div className="flex gap-1">
+                  <Button size="sm" variant="ghost" onClick={() => toggleDay(day)} aria-pressed={dayHidden}>
+                    {dayHidden ? <><Eye /> Show day</> : <><EyeOff /> Hide day</>}
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditing(emptySession(day))}><Plus /> Add session</Button>
+                </div>
               </div>
               <SortableList
                 items={list.map((s) => ({ ...s, id: s.key }))}
                 onReorder={(next) => replaceDay(day, next)}
                 className="divide-y divide-zinc-100"
                 render={(s, handle, i) => (
-                  <div className="flex items-start gap-3 bg-white px-3 py-3 sm:px-4">
+                  <div className={`flex items-start gap-3 px-3 py-3 sm:px-4 ${s.hidden || dayHidden ? "bg-zinc-50" : "bg-white"}`}>
                     <div className="pt-0.5">{handle}</div>
                     <div className="w-24 shrink-0 pt-0.5 text-[13px] tabular-nums text-zinc-500">
                       {s.startTime || s.endTime ? (
@@ -128,8 +150,9 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
                         "—"
                       )}
                     </div>
-                    <button type="button" className="min-w-0 flex-1 text-left" onClick={() => setEditing(s)}>
+                    <button type="button" className={`min-w-0 flex-1 text-left ${s.hidden || dayHidden ? "opacity-60" : ""}`} onClick={() => setEditing(s)}>
                       <span className="flex flex-wrap items-center gap-2">
+                        {s.hidden && <Badge tone="amber"><EyeOff className="size-3" /> Hidden</Badge>}
                         <span className="font-medium text-zinc-900">{s.title || <em className="text-zinc-500">Untitled</em>}</span>
                         {s.kind !== "session" && <Badge tone={s.kind === "break" || s.kind === "networking" ? "amber" : "blue"}>{KIND_LABELS[s.kind]}</Badge>}
                         {!s.titleFr && <Badge tone="neutral">No FR title</Badge>}
@@ -155,6 +178,7 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
                         <DropdownTrigger asChild><Button size="icon-sm" variant="ghost" aria-label="Session actions"><MoreHorizontal /></Button></DropdownTrigger>
                         <DropdownContent>
                           <DropdownItem onSelect={() => setEditing(s)}><Pencil /> Edit</DropdownItem>
+                          <DropdownItem onSelect={() => toggleHidden(s)}>{s.hidden ? <><Eye /> Show on public page</> : <><EyeOff /> Hide from public page</>}</DropdownItem>
                           <DropdownItem onSelect={() => duplicate(s)}><Copy /> Duplicate</DropdownItem>
                           <DropdownSeparator />
                           <DropdownItem destructive onSelect={() => setDeleting(s)}><Trash2 /> Delete</DropdownItem>
@@ -240,6 +264,10 @@ function SessionDialog({ initial, maxDay, onClose, onApply }: { initial: Session
           <Field label="Theme (English)">{(p) => <Input {...p} value={s.theme} onChange={(e) => set("theme", e.target.value)} />}</Field>
           <Field label="Theme (French)">{(p) => <Input {...p} value={s.themeFr} onChange={(e) => set("themeFr", e.target.value)} />}</Field>
           <Field label="Location / room" className="sm:col-span-2">{(p) => <Input {...p} value={s.location} onChange={(e) => set("location", e.target.value)} placeholder="Main hall" />}</Field>
+        </div>
+        <div className="rounded-lg border border-zinc-200 px-3 py-2.5">
+          <Switch checked={s.hidden} onCheckedChange={(v) => set("hidden", v)} label="Hide this session from the public page" />
+          <p className="mt-1 text-xs text-zinc-500">It stays here so you can show it again later.</p>
         </div>
 
         <div>

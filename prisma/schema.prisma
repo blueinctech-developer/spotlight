@@ -356,6 +356,8 @@ model Event {
   bannerId        String?
   banner          MediaAsset?     @relation(fields: [bannerId], references: [id], onDelete: SetNull)
   galleryIds      String[]        @default([])
+  /// Programme days (1-based) kept in the CMS but not shown on the public site.
+  hiddenDays      Int[]           @default([])
   sessions        EventSession[]
   partners        EventPartner[]
   createdAt       DateTime        @default(now())
@@ -381,6 +383,8 @@ model EventSession {
   location      String?
   kind          String           @default("session") // session | plenary | panel | break | networking
   order         Int              @default(0)
+  /// Kept in the CMS but not shown on the public site.
+  hidden        Boolean          @default(false)
   speakers      SessionSpeaker[]
 
   @@index([eventId, day, order])
