@@ -126,7 +126,12 @@ const sessionInput = z.object({
   location: optText(300),
   kind: z.enum(["session", "plenary", "panel", "break", "networking"]),
   speakers: z
-    .array(z.object({ speakerId: z.string(), role: z.enum(["SPEAKER", "MODERATOR", "PANELIST", "KEYNOTE"]) }))
+    .array(z.object({
+      speakerId: z.string(),
+      role: z.enum(["SPEAKER", "MODERATOR", "PANELIST", "KEYNOTE"]),
+      label: optText(120),
+      labelFr: optText(120),
+    }))
     .max(50),
 });
 
@@ -162,7 +167,7 @@ export const saveSessions = adminAction(
         await tx.sessionSpeaker.deleteMany({ where: { sessionId: row.id } });
         const unique = s.speakers.filter((x, i, a) => a.findIndex((y) => y.speakerId === x.speakerId) === i);
         if (unique.length) {
-          await tx.sessionSpeaker.createMany({ data: unique.map((x, i) => ({ sessionId: row.id, speakerId: x.speakerId, role: x.role, order: i })) });
+          await tx.sessionSpeaker.createMany({ data: unique.map((x, i) => ({ sessionId: row.id, speakerId: x.speakerId, role: x.role, label: x.label, labelFr: x.labelFr, order: i })) });
         }
       }
     });
@@ -203,7 +208,7 @@ export const duplicateEvent = adminAction("events.manage", z.object({ id: z.stri
     for (const s of sessions) {
       const { id: _sid, eventId: _e, speakers, ...sd } = s;
       const ns = await tx.eventSession.create({ data: { ...sd, eventId: ev.id } });
-      if (speakers.length) await tx.sessionSpeaker.createMany({ data: speakers.map((sp) => ({ sessionId: ns.id, speakerId: sp.speakerId, role: sp.role, order: sp.order })) });
+      if (speakers.length) await tx.sessionSpeaker.createMany({ data: speakers.map((sp) => ({ sessionId: ns.id, speakerId: sp.speakerId, role: sp.role, label: sp.label, labelFr: sp.labelFr, order: sp.order })) });
     }
     if (partners.length) await tx.eventPartner.createMany({ data: partners.map((p) => ({ eventId: ev.id, partnerId: p.partnerId, tier: p.tier, order: p.order })) });
     return ev;

@@ -55,6 +55,9 @@ const dict = {
   speakersArchive: { en: "Speakers Archive", fr: "Archives des intervenants" },
   day: { en: "Day", fr: "Jour" },
   moderator: { en: "Moderator", fr: "Modérateur" },
+  panelist: { en: "Panelist", fr: "Panéliste" },
+  keynote: { en: "Keynote", fr: "Keynote" },
+  speaker: { en: "Speaker", fr: "Intervenant" },
   noPosts: { en: "Nothing found.", fr: "Rien n'a été trouvé." },
   pageNotFound: { en: "Page not found", fr: "Page introuvable" },
   notFoundText: {

@@ -65,6 +65,8 @@ export default async function EventEditPage(props: PageProps<"/admin/events/[id]
     kind: (["session", "plenary", "panel", "break", "networking"].includes(s.kind) ? s.kind : "session") as SessionKind,
     speakers: s.speakers.map((sp) => ({
       role: sp.role as SessionRole,
+      label: sp.label ?? "",
+      labelFr: sp.labelFr ?? "",
       speaker: {
         id: sp.speaker.id,
         name: sp.speaker.name,

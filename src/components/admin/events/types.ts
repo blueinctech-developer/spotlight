@@ -19,7 +19,8 @@ export type SessionDraft = {
   descriptionFr: string;
   location: string;
   kind: SessionKind;
-  speakers: { speaker: SpeakerOption; role: SessionRole }[];
+  /** `label` (optional) replaces the role name on the public card; the role still sets its colour. */
+  speakers: { speaker: SpeakerOption; role: SessionRole; label: string; labelFr: string }[];
 };
 
 export type EventDetails = {

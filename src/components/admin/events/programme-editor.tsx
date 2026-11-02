@@ -51,7 +51,9 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
       if (idx === -1) return [...list, s].sort((a, b) => a.day - b.day);
       const next = [...list];
       next[idx] = s;
-      return next.sort((a, b) => a.day - b.day || list.indexOf(a) - list.indexOf(b));
+      // Compare positions by key: the edited session is a new object, so indexOf(a) on `list` would be -1.
+      const pos = new Map(next.map((x, i) => [x.key, i]));
+      return next.sort((a, b) => a.day - b.day || pos.get(a.key)! - pos.get(b.key)!);
     });
   };
 
@@ -72,7 +74,7 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
         sessions: sessions.map((s) => ({
           id: s.dbId, day: s.day, startTime: s.startTime, endTime: s.endTime, title: s.title, titleFr: s.titleFr,
           theme: s.theme, themeFr: s.themeFr, description: s.description, descriptionFr: s.descriptionFr,
-          location: s.location, kind: s.kind, speakers: s.speakers.map((x) => ({ speakerId: x.speaker.id, role: x.role })),
+          location: s.location, kind: s.kind, speakers: s.speakers.map((x) => ({ speakerId: x.speaker.id, role: x.role, label: x.label, labelFr: x.labelFr })),
         })),
       });
       if (!res.ok) return void toast.error(res.error);
@@ -140,7 +142,7 @@ export function ProgrammeEditor({ eventId, initial, onDirty }: { eventId: string
                             <span key={sp.speaker.id} className="inline-flex items-center gap-1.5 rounded-full bg-zinc-100 py-0.5 pl-0.5 pr-2 text-xs text-zinc-700">
                               <Avatar url={sp.speaker.photoUrl} name={sp.speaker.name} className="size-5 text-[9px]" />
                               {sp.speaker.name}
-                              {sp.role !== "SPEAKER" && <span className="text-zinc-500">· {ROLE_LABELS[sp.role]}</span>}
+                              {(sp.label || sp.role !== "SPEAKER") && <span className="text-zinc-500">· {sp.label || ROLE_LABELS[sp.role]}</span>}
                             </span>
                           ))}
                         </span>
@@ -241,34 +243,61 @@ function SessionDialog({ initial, maxDay, onClose, onApply }: { initial: Session
         </div>
 
         <div>
-          <p className="mb-2 text-[13px] font-medium text-zinc-700">Speakers & moderators</p>
+          <p className="text-[13px] font-medium text-zinc-700">Speakers & moderators</p>
+          <p className="mb-2 text-xs text-zinc-500">
+            Each speaker appears as a card with a tag above the photo. The tag shows the role, or your own text (e.g. “Goodwill Message”). Moderator tags are black, all others green.
+          </p>
           {s.speakers.length > 0 && (
             <ul className="mb-3 divide-y divide-zinc-100 rounded-lg border border-zinc-200">
-              {s.speakers.map((sp, i) => (
-                <li key={sp.speaker.id} className="flex items-center gap-2.5 px-3 py-2">
-                  <Avatar url={sp.speaker.photoUrl} name={sp.speaker.name} />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-medium text-zinc-900">{sp.speaker.name}</span>
-                    <span className="block truncate text-xs text-zinc-500">{[sp.speaker.jobTitle, sp.speaker.organization].filter(Boolean).join(", ")}</span>
-                  </span>
-                  <Select
-                    aria-label={`Role of ${sp.speaker.name}`}
-                    className="h-8 w-32"
-                    value={sp.role}
-                    onChange={(e) => set("speakers", s.speakers.map((x, j) => (j === i ? { ...x, role: e.target.value as SessionRole } : x)))}
-                  >
-                    {Object.entries(ROLE_LABELS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}
-                  </Select>
-                  <Button size="icon-sm" variant="ghost" aria-label="Move up" disabled={i === 0} onClick={() => moveSpeaker(i, -1)}><ArrowUp /></Button>
-                  <Button size="icon-sm" variant="ghost" aria-label="Move down" disabled={i === s.speakers.length - 1} onClick={() => moveSpeaker(i, 1)}><ArrowDown /></Button>
-                  <Button size="icon-sm" variant="danger-ghost" aria-label={`Remove ${sp.speaker.name}`} onClick={() => set("speakers", s.speakers.filter((_, j) => j !== i))}><X /></Button>
-                </li>
-              ))}
+              {s.speakers.map((sp, i) => {
+                const patch = (p: Partial<SessionDraft["speakers"][number]>) =>
+                  set("speakers", s.speakers.map((x, j) => (j === i ? { ...x, ...p } : x)));
+                return (
+                  <li key={sp.speaker.id} className="space-y-2 px-3 py-2.5">
+                    <div className="flex items-center gap-2.5">
+                      <Avatar url={sp.speaker.photoUrl} name={sp.speaker.name} />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium text-zinc-900">{sp.speaker.name}</span>
+                        <span className="block truncate text-xs text-zinc-500">{[sp.speaker.jobTitle, sp.speaker.organization].filter(Boolean).join(", ")}</span>
+                      </span>
+                      <Select
+                        aria-label={`Role of ${sp.speaker.name}`}
+                        className="h-8 w-32"
+                        value={sp.role}
+                        onChange={(e) => patch({ role: e.target.value as SessionRole })}
+                      >
+                        {Object.entries(ROLE_LABELS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+                      </Select>
+                      <Button size="icon-sm" variant="ghost" aria-label="Move up" disabled={i === 0} onClick={() => moveSpeaker(i, -1)}><ArrowUp /></Button>
+                      <Button size="icon-sm" variant="ghost" aria-label="Move down" disabled={i === s.speakers.length - 1} onClick={() => moveSpeaker(i, 1)}><ArrowDown /></Button>
+                      <Button size="icon-sm" variant="danger-ghost" aria-label={`Remove ${sp.speaker.name}`} onClick={() => set("speakers", s.speakers.filter((_, j) => j !== i))}><X /></Button>
+                    </div>
+                    <div className="grid gap-2 sm:grid-cols-2 sm:pl-[42px]">
+                      <Input
+                        aria-label={`Card tag for ${sp.speaker.name} (English)`}
+                        className="h-8 text-[13px]"
+                        maxLength={120}
+                        value={sp.label}
+                        placeholder={`Tag (EN): ${ROLE_LABELS[sp.role]}`}
+                        onChange={(e) => patch({ label: e.target.value })}
+                      />
+                      <Input
+                        aria-label={`Card tag for ${sp.speaker.name} (French)`}
+                        className="h-8 text-[13px]"
+                        maxLength={120}
+                        value={sp.labelFr}
+                        placeholder="Tag (FR): same as English"
+                        onChange={(e) => patch({ labelFr: e.target.value })}
+                      />
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           )}
           <SpeakerSearch
             exclude={s.speakers.map((x) => x.speaker.id)}
-            onPick={(speaker) => set("speakers", [...s.speakers, { speaker, role: "SPEAKER" }])}
+            onPick={(speaker) => set("speakers", [...s.speakers, { speaker, role: "SPEAKER", label: "", labelFr: "" }])}
           />
         </div>
 

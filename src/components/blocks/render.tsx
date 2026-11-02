@@ -687,68 +687,117 @@ function Schedule({ b, ctx }: { b: BlockOf<"schedule">; ctx: RenderContext }) {
   const days = [...new Set(ev.sessions.map((s) => s.day))];
   return (
     <section {...section(b.anchor)} className="py-16 md:py-20">
-      <div className="site-container max-w-[1000px]">
+      <div className="site-container max-w-[1180px]">
         {b.title && <h2 data-reveal="up" className="mb-10 text-center font-heading text-[34px] font-semibold md:text-[44px]">{b.title}</h2>}
         {days.map((day) => (
-          <div key={day} className="mb-12">
-            <div data-reveal="left" className="mb-6 flex flex-wrap items-center gap-4 rounded-[5px] bg-[#555] px-5 py-4 text-white">
-              <IconCalendar />
-              <span className="font-heading text-[20px] font-bold">{day}{ctx.locale === "fr" ? "er" : "st"} {t("day", ctx.locale)}</span>
-              {ev.startsAt && <span className="text-white/80">{formatDate(new Date(ev.startsAt.getTime() + (day - 1) * 86400_000), ctx.locale)}</span>}
-              {ev.venueName && <span className="text-white/80">· {ev.venueName}</span>}
-            </div>
-            <ol data-reveal-stagger className="space-y-5">
-              {ev.sessions.filter((s) => s.day === day).map((s) => {
-                const isBreak = s.kind === "break" || s.kind === "networking";
-                return (
-                  <li key={s.id}>
-                  <div className={`hover-lift overflow-hidden rounded-[10px] ${isBreak ? "bg-brand text-center text-white" : "grid bg-snow md:grid-cols-[1fr_1fr]"}`}>
-                    {isBreak ? (
-                      <p className="px-6 py-5 font-heading text-[18px] font-bold">
-                        {s.title}
-                        {(s.startTime || s.endTime) && <span className="font-medium"> ({[s.startTime, s.endTime].filter(Boolean).join(" - ")})</span>}
-                      </p>
-                    ) : (
-                      <>
-                        <div className="bg-brand p-6 text-white md:p-8">
-                          {(s.startTime || s.endTime) && (
-                            <p className="flex items-center gap-2 text-[15px]"><IconClock width={16} height={16} /> {[s.startTime, s.endTime].filter(Boolean).join(" - ")}</p>
-                          )}
-                          <h3 className="mt-2 font-heading text-[22px] font-bold leading-snug text-white">{s.title}</h3>
-                          {s.theme && <p className="mt-3 text-[15px] font-semibold">{s.theme}</p>}
-                          {s.location && <p className="mt-3 flex items-center gap-2 text-sm"><IconLocation width={16} height={16} /> {s.location}</p>}
-                        </div>
-                        <div className="p-6 md:p-8">
-                          {s.speakers.length > 0 && (
-                            <ul className="grid gap-5 sm:grid-cols-2">
-                              {s.speakers.map(({ speaker, role }) => (
-                                <li key={speaker.id} className="text-center">
-                                  <Link href={localizePath(`speakers/${speaker.slug}`, ctx.locale)} className="group block">
-                                    <span className="relative mx-auto block size-[64px] overflow-hidden rounded-full bg-mist ring-2 ring-transparent transition-all duration-500 [transition-timing-function:var(--ease-spring)] group-hover:scale-110 group-hover:ring-brand">
-                                      {speaker.photo && <MediaImage media={speaker.photo} fill sizes="64px" className="object-cover" />}
-                                    </span>
-                                    <span className="mt-2 block text-[14px] font-semibold text-ink group-hover:text-brand">{speaker.name}</span>
-                                    <span className="block text-[13px] text-body">
-                                      {role === "MODERATOR" ? `${t("moderator", ctx.locale)} · ` : ""}{[speaker.jobTitle, speaker.organization].filter(Boolean).join(", ")}
-                                    </span>
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                          {s.description && <Html html={s.description} className={`prose-site text-[14px] ${s.speakers.length ? "mt-6" : ""}`} />}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  </li>
-                );
-              })}
+          <div key={day} className="mb-12 last:mb-0">
+            {(days.length > 1 || ev.startsAt || ev.venueName) && (
+              <div data-reveal="left" className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-1 rounded-[5px] bg-[#555] px-5 py-4 text-white">
+                <IconCalendar />
+                <span className="font-heading text-[20px] font-bold">{day}{ctx.locale === "fr" ? (day === 1 ? "er" : "e") : ordinalSuffix(day)} {t("day", ctx.locale)}</span>
+                {ev.startsAt && <span className="text-white/80">{formatDate(new Date(ev.startsAt.getTime() + (day - 1) * 86400_000), ctx.locale)}</span>}
+                {ev.venueName && <span className="text-white/80">· {ev.venueName}</span>}
+              </div>
+            )}
+            <ol className="space-y-6 md:space-y-8">
+              {ev.sessions.filter((s) => s.day === day).map((s) => (
+                <li key={s.id}>
+                  <ScheduleSessionCard s={s} locale={ctx.locale} />
+                </li>
+              ))}
             </ol>
           </div>
         ))}
       </div>
     </section>
+  );
+}
+
+const ordinalSuffix = (n: number) => (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] ?? "th");
+
+const ROLE_TAG: Record<string, "moderator" | "panelist" | "keynote" | "speaker"> = {
+  MODERATOR: "moderator", PANELIST: "panelist", KEYNOTE: "keynote", SPEAKER: "speaker",
+};
+
+/**
+ * One programme slot: a grey title bar with a green edge (time + title), an optional theme bar,
+ * then a white panel of speaker cards: tag, round portrait, name, job title.
+ */
+function ScheduleSessionCard({ s, locale }: { s: BlockData["events"][string]["sessions"][number]; locale: Locale }) {
+  const time = [s.startTime, s.endTime].filter(Boolean).join(" – ");
+  const isBreak = s.kind === "break" || s.kind === "networking";
+  // A tag is shown when the editor wrote one or the role is more specific than "speaker".
+  const tagOf = (sp: (typeof s.speakers)[number]) => sp.label || (sp.role !== "SPEAKER" ? t(ROLE_TAG[sp.role] ?? "speaker", locale) : "");
+  const anyTag = s.speakers.some((sp) => tagOf(sp));
+  const hasBody = s.speakers.length > 0 || !!s.description;
+
+  return (
+    <article data-reveal="up" className="bg-[#f9f8ff] px-2.5 py-5 sm:px-6 sm:py-6 md:px-10 md:py-8">
+      <header className={`border border-l-[10px] border-[#e4e4e4] px-4 py-4 text-center ${isBreak ? "border-l-brand bg-brand-50" : "border-l-brand bg-[#f0f0f0]"}`}>
+        <h3 className="font-heading text-[19px] font-bold leading-snug text-ink md:text-[22px]">
+          {time && (
+            <span className="mr-2 inline-flex items-center gap-1.5 whitespace-nowrap align-baseline font-semibold text-brand-700">
+              <IconClock width={16} height={16} className="relative top-[2px]" />
+              <span>({time})</span>
+            </span>
+          )}
+          {s.title}
+        </h3>
+        {s.location && (
+          <p className="mt-1.5 inline-flex items-center gap-1.5 text-[14px] text-body">
+            <IconLocation width={14} height={14} /> {s.location}
+          </p>
+        )}
+      </header>
+      {s.theme && (
+        <p className="border-x border-b border-l-[10px] border-[#e4e4e4] border-l-transparent bg-[#f0f0f0] px-4 py-3.5 text-center font-heading text-[16px] font-semibold leading-snug text-ink md:text-[18px]">
+          {s.theme}
+        </p>
+      )}
+      {hasBody && (
+        <div className="bg-white px-4 py-8 sm:px-6 md:px-9 md:py-10">
+          {s.speakers.length > 0 && (
+            <ul data-reveal-stagger className="flex flex-wrap justify-center gap-x-6 gap-y-10">
+              {s.speakers.map((sp) => {
+                const tag = tagOf(sp);
+                const job = [sp.speaker.jobTitle, sp.speaker.organization].filter(Boolean).join(", ");
+                return (
+                  <li key={sp.speaker.id} className="w-full max-w-[300px] sm:w-[calc(50%-12px)] lg:w-[calc(25%-18px)]">
+                    <Link href={localizePath(`speakers/${sp.speaker.slug}`, locale)} className="group flex h-full flex-col items-center text-center">
+                      {anyTag && (
+                        // Fixed-height slot (two lines) so portraits line up when cards sit side by side.
+                        <span className="mb-5 flex items-end justify-center sm:min-h-[48px]">
+                          {tag && (
+                            <span className={`inline-block px-3.5 py-2 text-[13px] font-semibold leading-tight text-white ${sp.role === "MODERATOR" ? "bg-black" : "bg-brand"}`}>
+                              {tag}
+                            </span>
+                          )}
+                        </span>
+                      )}
+                      <span className="relative block aspect-square w-[80%] max-w-[200px] overflow-hidden rounded-full bg-mist ring-4 ring-transparent transition-all duration-500 [transition-timing-function:var(--ease-spring)] group-hover:scale-[1.04] group-hover:ring-brand/30">
+                        {sp.speaker.photo ? (
+                          // The name is written right below, so the portrait is decorative here.
+                          <MediaImage media={sp.speaker.photo} alt="" fill sizes="200px" className="object-cover" />
+                        ) : (
+                          <span aria-hidden className="absolute inset-0 flex items-center justify-center font-heading text-4xl font-bold text-black/15">
+                            {sp.speaker.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                          </span>
+                        )}
+                      </span>
+                      <span className="mt-4 block font-heading text-[18px] font-semibold leading-snug text-brand transition-colors duration-300 group-hover:text-brand-700">
+                        {sp.speaker.name}
+                      </span>
+                      {job && <span className="mt-1.5 block text-[14px] leading-snug text-ink">{job}</span>}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {s.description && <Html html={s.description} className={`prose-site mx-auto max-w-[760px] text-[15px] ${s.speakers.length ? "mt-8" : ""}`} />}
+        </div>
+      )}
+    </article>
   );
 }
 

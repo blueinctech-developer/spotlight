@@ -123,7 +123,8 @@ export type TestimonialCard = {
 export type ScheduleSession = {
   id: string; day: number; startTime: string | null; endTime: string | null; title: string; theme: string | null;
   description: string | null; location: string | null; kind: string;
-  speakers: { role: string; speaker: SpeakerCard }[];
+  /** `label` is the editor-written tag text (localized), or null to show the role name. */
+  speakers: { role: string; label: string | null; speaker: SpeakerCard }[];
 };
 export type ScheduleEvent = {
   id: string; title: string; startsAt: Date | null; venueName: string | null; venueAddress: string | null;
@@ -232,7 +233,11 @@ export async function loadBlockData(blocks: Block[], locale: Locale): Promise<Bl
             description: (locale === "fr" && s.descriptionFr) || s.description,
             location: s.location,
             kind: s.kind,
-            speakers: s.speakers.map((sp) => ({ role: sp.role, speaker: toSpeakerCard(sp.speaker, locale) })),
+            speakers: s.speakers.map((sp) => ({
+              role: sp.role,
+              label: (locale === "fr" && sp.labelFr) || sp.label || null,
+              speaker: toSpeakerCard(sp.speaker, locale),
+            })),
           })),
         },
       ]),
