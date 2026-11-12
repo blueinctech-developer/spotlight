@@ -8,7 +8,7 @@ The app is a standard Next.js 16 Node server. It runs on **Vercel**, on a Node h
 |---|---|---|
 | PostgreSQL 15+ | Neon, Supabase, RDS, Render | Create a database and an app role that can read/write tables (no superuser). Turn on automated backups / PITR |
 | Object storage | Cloudflare R2 (no egress fees) or AWS S3 | One bucket. Make objects publicly readable, or put a CDN domain such as `media.spotlightnigeria-france.com` in front. Give the access key permission for this bucket only (Get/Put/Delete/Head) |
-| SMTP | Brevo, Postmark, SES, or the existing WP Mail SMTP account | Verify the sender domain (SPF/DKIM) |
+| Email | Amazon SES (API keys), or any SMTP provider (Brevo, Postmark, WP Mail SMTP) | Verify the sender domain (SPF/DKIM). SES: move the account out of the sandbox so it can email any address |
 
 ## 2. Environment variables
 
@@ -16,7 +16,7 @@ Copy `.env.example` and fill it in. Secrets belong in the host's secret manager,
 
 - **Required:** `DATABASE_URL`, `SITE_URL`, `APP_SECRET`, `STORAGE_DRIVER=s3` + `S3_*`.
 - **Required before the first administrator exists:** `SETUP_TOKEN`. In production `/admin/setup/` stays locked without it. Alternatively, create the administrator with `npm run admin:create`. A deliberate override, `ALLOW_SETUP_WITHOUT_TOKEN=true`, exists but is not recommended.
-- **Recommended:** `NEXT_PUBLIC_MEDIA_BASE_URL`, `SMTP_*`, `NOTIFY_EMAIL`, `CRON_SECRET`.
+- **Recommended:** `NEXT_PUBLIC_MEDIA_BASE_URL`, `EMAIL_FROM`, `NOTIFY_EMAIL`, `CRON_SECRET`, and either `SES_ACCESS_KEY_ID` + `SES_SECRET_ACCESS_KEY` + `SES_REGION` (Amazon SES, used first) or `SMTP_*`.
 - **Only behind your own proxy (not Vercel):** `TRUSTED_PROXY_HOPS`, or `TRUSTED_IP_HEADER` (for example `cf-connecting-ip` behind Cloudflare). These decide which address the rate limits use. Without them the right-most `X-Forwarded-For` entry is used.
 - `NEXT_PUBLIC_MEDIA_BASE_URL` is read at build time; rebuild after changing it.
 - **Preview vs production on Vercel:** give Preview deployments their **own** `DATABASE_URL`, bucket and `SITE_URL`, and keep "Discourage search engines" on there. Never point a preview at the production database.

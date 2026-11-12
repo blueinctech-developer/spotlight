@@ -154,7 +154,7 @@ async function sendResetEmail(email: string) {
     const user = await db.user.findUnique({ where: { email } });
     if (!user || !user.active) return;
     if (!emailConfigured()) {
-      console.warn("Password reset requested but SMTP is not configured; use `npm run admin:create -- --reset` instead.");
+      console.warn("Password reset requested but email is not configured; use `npm run admin:create -- --reset` instead.");
       await audit({ userId: user.id, action: "auth.reset_unavailable", entityType: "USER", entityId: user.id, summary: `Password reset requested for ${user.email}, but email is not configured` });
       return;
     }

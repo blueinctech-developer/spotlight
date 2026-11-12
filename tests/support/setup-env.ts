@@ -6,3 +6,4 @@ process.env.DATABASE_URL = process.env.TEST_DATABASE_URL;
 process.env.STORAGE_DRIVER = "local";
 process.env.LOCAL_STORAGE_DIR = process.env.LOCAL_STORAGE_DIR ?? ".data/test-uploads";
 delete process.env.SMTP_HOST;
+delete process.env.SES_ACCESS_KEY_ID;

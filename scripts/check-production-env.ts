@@ -13,7 +13,7 @@ import { S3Client, HeadBucketCommand, ListObjectsV2Command } from "@aws-sdk/clie
 const file = process.argv[2] ?? ".env.neon-production";
 const env = parse(fs.readFileSync(file));
 const required = ["DATABASE_URL", "SITE_URL", "APP_SECRET", "SETUP_TOKEN", "CRON_SECRET", "STORAGE_DRIVER", "S3_BUCKET", "S3_ENDPOINT", "S3_REGION", "S3_ACCESS_KEY_ID", "S3_SECRET_ACCESS_KEY"];
-const optional = ["SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM", "NOTIFY_EMAIL", "ADMIN_EMAIL", "ADMIN_NAME", "ADMIN_PASSWORD"];
+const optional = ["EMAIL_FROM", "SES_ACCESS_KEY_ID", "SES_SECRET_ACCESS_KEY", "SES_REGION", "SMTP_HOST", "SMTP_USER", "SMTP_PASSWORD", "SMTP_FROM", "NOTIFY_EMAIL", "ADMIN_EMAIL", "ADMIN_NAME", "ADMIN_PASSWORD"];
 
 console.log(`Checking ${file}`);
 for (const k of [...required, ...optional]) console.log(`  ${required.includes(k) ? "required" : "optional"}  ${k.padEnd(22)} ${env[k] ? "set" : "MISSING"}`);

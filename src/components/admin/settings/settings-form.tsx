@@ -354,7 +354,7 @@ function EnvironmentCard({ env }: { env: EnvStatus }) {
                 : "Local disk (development)"
           }
         />
-        <Row ok={env.email} label="Email" detail={env.email ? "SMTP configured — notifications and password resets are sent." : "Not configured — notifications and password-reset emails are not sent."} />
+        <Row ok={env.email} label="Email" detail={env.email ? "Email configured — notifications and password resets are sent." : "Not configured — notifications and password-reset emails are not sent."} />
         <Row ok label="Site URL" detail={`${env.siteUrl}${env.production ? "" : " · development mode"}`} />
       </ul>
     </Card>

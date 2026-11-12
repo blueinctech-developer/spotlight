@@ -19,7 +19,12 @@ const schema = z.object({
   S3_SECRET_ACCESS_KEY: z.string().optional(),
   /** Public base URL that serves bucket objects (CDN or bucket public URL). If unset, media is proxied via /media/. */
   NEXT_PUBLIC_MEDIA_BASE_URL: z.string().url().optional(),
-  // Email (SMTP). If unset, submissions are stored but notification emails are not sent.
+  // Email. Amazon SES (API keys) is used when SES_* are set, otherwise SMTP.
+  // If neither is set, submissions are stored but notification emails are not sent.
+  EMAIL_FROM: z.string().optional(),
+  SES_ACCESS_KEY_ID: z.string().optional(),
+  SES_SECRET_ACCESS_KEY: z.string().optional(),
+  SES_REGION: z.string().optional(),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().default(587),
   SMTP_USER: z.string().optional(),
