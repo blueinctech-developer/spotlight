@@ -6,6 +6,7 @@ import { formKeys, type FormKey } from "@/lib/blocks/schema";
 import { hashIdentifier, rateLimit } from "@/lib/rate-limit";
 import { mediaUrl } from "@/lib/media-url";
 import { notifySubmission } from "./notify";
+import { confirmSubmission } from "./confirm";
 import type { Locale } from "@/lib/i18n";
 
 /** Identical answers from the same sender within this window are treated as one submission. */
@@ -99,6 +100,12 @@ export async function processSubmission(input: {
         await notifySubmission(submissionId);
       } catch (err) {
         console.error("form notification error:", err instanceof Error ? err.message : "unknown error");
+      }
+      // Thank-you email to the visitor (contact and sponsorship). Sent once, never retried.
+      try {
+        await confirmSubmission(submissionId);
+      } catch (err) {
+        console.error("form confirmation error:", err instanceof Error ? err.message : "unknown error");
       }
     }
   }

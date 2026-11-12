@@ -25,7 +25,7 @@ const TABS: { id: string; label: string; groups: SettingsKey[] }[] = [
   { id: "contact", label: "Contact & social", groups: ["contact", "social"] },
   { id: "seo", label: "SEO", groups: ["seo"] },
   { id: "privacy", label: "Analytics & privacy", groups: ["analytics", "privacy"] },
-  { id: "notifications", label: "Form notifications", groups: ["notifications"] },
+  { id: "notifications", label: "Form emails", groups: ["notifications", "confirmations"] },
   { id: "environment", label: "Environment", groups: [] },
 ];
 
@@ -300,6 +300,26 @@ export function SettingsForm({ initial, env }: { initial: AllSettings; env: EnvS
             </div>
           </Card>
         )}
+
+        {tab === "notifications" &&
+          (
+            [
+              ["contact", "Contact form: confirmation to the visitor"],
+              ["sponsorship", "Sponsorship form: confirmation to the visitor"],
+            ] as const
+          ).map(([k, title]) => (
+            <Card key={k}>
+              <CardHeader
+                title={title}
+                description="Sent to the email address the visitor typed in the form, in the language of the page they used. {name} is replaced by their name. Replies go to the notification address above."
+                action={<Switch checked={s.confirmations[`${k}Enabled`]} onCheckedChange={(v) => set("confirmations", { [`${k}Enabled`]: v } as Partial<AllSettings["confirmations"]>)} label="Send" />}
+              />
+              <div className="grid gap-5 p-5">
+                <I18nField label="Subject" value={s.confirmations[`${k}Subject`]} onChange={(v) => set("confirmations", { [`${k}Subject`]: v } as Partial<AllSettings["confirmations"]>)} error={i18nErr(`confirmations.${k}Subject`)} />
+                <I18nField label="Message" textarea value={s.confirmations[`${k}Message`]} onChange={(v) => set("confirmations", { [`${k}Message`]: v } as Partial<AllSettings["confirmations"]>)} error={i18nErr(`confirmations.${k}Message`)} />
+              </div>
+            </Card>
+          ))}
 
         {tab === "environment" && <EnvironmentCard env={env} />}
 

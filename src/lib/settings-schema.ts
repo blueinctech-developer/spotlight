@@ -4,6 +4,9 @@ import { z } from "zod";
 export const i18nText = (max = 500) =>
   z.object({ en: z.string().max(max).default(""), fr: z.string().max(max).default("") }).default({ en: "", fr: "" });
 export type I18nText = { en: string; fr: string };
+/** Like i18nText, but with starting text (used when a field is left empty as a whole). */
+const i18nWithDefault = (max: number, en: string, fr: string) =>
+  z.object({ en: z.string().max(max).default(en), fr: z.string().max(max).default(fr) }).default({ en, fr });
 
 /** Absolute web address only (z.string().url() alone also accepts "javascript:" URLs). */
 const url = z.union([z.literal(""), z.string().max(500).regex(/^https?:\/\/\S+$/i, "Use a full https:// address.")]).default("");
@@ -91,6 +94,23 @@ export const settingsSchemas = {
     "report-download": z.string().max(300).default(""),
     press: z.string().max(300).default(""),
     newsletter: z.string().max(300).default(""),
+  }),
+  confirmations: z.object({
+    /** Thank-you email sent to the address the visitor typed. {name} = the name they gave. */
+    contactEnabled: z.boolean().default(true),
+    contactSubject: i18nWithDefault(200, "Thank you for contacting Spotlight Nigeria", "Merci d'avoir contacté Spotlight Nigeria"),
+    contactMessage: i18nWithDefault(
+      3000,
+      "Dear {name},\n\nThank you for contacting us. We have received your message and our team will get back to you as soon as possible.\n\nBest regards,\nThe Spotlight Nigeria team",
+      "Bonjour {name},\n\nMerci de nous avoir contactés. Nous avons bien reçu votre message et notre équipe vous répondra dans les meilleurs délais.\n\nCordialement,\nL'équipe Spotlight Nigeria",
+    ),
+    sponsorshipEnabled: z.boolean().default(true),
+    sponsorshipSubject: i18nWithDefault(200, "Sponsorship request received – Spotlight Nigeria", "Demande de parrainage reçue – Spotlight Nigeria"),
+    sponsorshipMessage: i18nWithDefault(
+      3000,
+      "Dear {name},\n\nThank you for your interest in sponsoring Spotlight Nigeria. We have received your sponsorship request and our team will contact you shortly with the next steps.\n\nBest regards,\nThe Spotlight Nigeria team",
+      "Bonjour {name},\n\nMerci de l'intérêt que vous portez au parrainage de Spotlight Nigeria. Nous avons bien reçu votre demande et notre équipe vous contactera prochainement pour les prochaines étapes.\n\nCordialement,\nL'équipe Spotlight Nigeria",
+    ),
   }),
 } as const;
 

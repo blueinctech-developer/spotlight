@@ -50,7 +50,7 @@ export async function sendEmail(opts: { to: string; subject: string; rows?: [str
     ? `<table cellpadding="6" style="border-collapse:collapse;font-family:sans-serif;font-size:14px">${opts.rows
         .map(([k, v]) => `<tr><th align="left" style="border-bottom:1px solid #eee">${escape(k)}</th><td style="border-bottom:1px solid #eee;white-space:pre-wrap">${escape(v)}</td></tr>`)
         .join("")}</table>`
-    : `<pre style="font-family:sans-serif">${escape(text)}</pre>`;
+    : `<div style="font-family:sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap">${escape(text)}</div>`;
   await getTransport().sendMail({
     from: sender(),
     to: opts.to,
