@@ -13,6 +13,7 @@
     "db:generate": "prisma generate",
     "migrate:fetch": "tsx scripts/migration/fetch.ts",
     "migrate:import": "tsx --conditions=react-server scripts/migration/import.ts",
+    "migrate:submissions": "tsx --conditions=react-server scripts/migration/import-wp-submissions.ts",
     "migrate:programme-2026": "tsx --conditions=react-server scripts/migration/programme-2026.ts",
     "admin:create": "tsx --conditions=react-server scripts/create-admin.ts",
     "test": "vitest run",

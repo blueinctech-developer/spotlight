@@ -44,9 +44,14 @@ export default async function SubmissionPage(props: PageProps<"/admin/submission
       <div className="mb-4 flex flex-wrap gap-2">
         <Badge tone={sub.status === "SPAM" ? "red" : sub.status === "ARCHIVED" ? "violet" : "neutral"}>{sub.status.toLowerCase()}</Badge>
         <Badge tone="blue">{sub.locale === "fr" ? "French site" : "English site"}</Badge>
+        {sub.source === "wordpress-import" && <Badge tone="violet">Imported from WordPress</Badge>}
       </div>
 
-      {sub.notifiedAt ? (
+      {sub.source === "wordpress-import" ? (
+        <p className="mb-4 text-sm text-zinc-500">
+          Copied from the old WordPress site. No email was sent from this site for it, and none will be.
+        </p>
+      ) : sub.notifiedAt ? (
         <p className="mb-4 flex items-center gap-2 text-sm text-zinc-500">
           <CheckCircle2 className="size-4 text-emerald-600" /> Notification accepted by the email provider{" "}
           {sub.notifiedAt.toLocaleString("en-GB", { timeZone: "Europe/Paris" })}

@@ -29,6 +29,8 @@ export async function notifySubmission(id: string, opts: { force?: boolean } = {
   const sub = await db.formSubmission.findUnique({ where: { id } });
   if (!sub) return "missing";
   if (sub.notifiedAt) return "already_sent";
+  // History imported from the old site was handled there; never email it from here.
+  if (sub.source !== "website") return "already_sent";
   if (!(formKeys as readonly string[]).includes(sub.formKey)) return "missing";
   const key = sub.formKey as FormKey;
 

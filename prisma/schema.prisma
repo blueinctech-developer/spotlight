@@ -515,7 +515,11 @@ model FormSubmission {
   /// When the last attempt started; also used as a short lock so two workers never send twice.
   notifyLastAttemptAt DateTime?
   /// Hash of form + sender + answers + 10-minute window: an identical resubmission is not stored twice.
+  /// Imported rows use "wp:" + hash of form + email + original timestamp, which makes re-imports no-ops.
   dedupeKey   String?          @unique
+  /// "website" (this site's forms) or "wordpress-import" (history copied from the old site).
+  source      String           @default("website")
+  /// For imports: the original submission time on the old site.
   createdAt   DateTime         @default(now())
 
   @@index([formKey, createdAt])
