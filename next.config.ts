@@ -91,6 +91,15 @@ const nextConfig: NextConfig = {
         "events_tag-sitemap", "hf_template-sitemap",
       ].map((name) => ({ source: `/${name}.xml`, destination: "/sitemap.xml", permanent: true })),
       { source: "/index.php", destination: "/", permanent: true },
+      // Old image/document links (Google Images, shared posts, emails). Migrated files keep their
+      // WordPress path under /media/uploads/. WordPress resized copies ("photo-300x200.jpg") were not
+      // migrated, so they go to the original file.
+      {
+        source: "/wp-content/uploads/:dir(.*)/:name([^/]+)-:size(\\d+x\\d+).:ext(jpe?g|png|gif|webp|JPE?G|PNG)",
+        destination: "/media/uploads/:dir/:name.:ext",
+        permanent: true,
+      },
+      { source: "/wp-content/uploads/:path(.*)", destination: "/media/uploads/:path", permanent: true },
     ];
   },
   async headers() {
