@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { emailConfigured, sendEmail } from "@/lib/email";
 import { getSetting } from "@/lib/settings";
+import { siteUrl } from "@/lib/env";
 import type { I18nText } from "@/lib/settings-schema";
 
 /** Forms that send the visitor a thank-you email. */
@@ -32,8 +33,33 @@ export async function confirmSubmission(id: string): Promise<"sent" | "skipped" 
   const notifications = await getSetting("notifications");
   const replyTo = (notifications[key] || process.env.NOTIFY_EMAIL || "").split(",")[0]?.trim() || undefined;
 
+  const fr = sub.locale === "fr";
+  const finalSubject = fill(subject, sub.name).replace(/[\r\n]+/g, " ");
+  const body = fill(message, sub.name);
+  const host = siteUrl().replace(/^https?:\/\//, "").replace(/\/$/, "");
   try {
-    await sendEmail({ to: sub.email, replyTo, subject: fill(subject, sub.name).replace(/[\r\n]+/g, " "), text: fill(message, sub.name) });
+    await sendEmail({
+      to: sub.email,
+      replyTo,
+      subject: finalSubject,
+      text: body,
+      content: {
+        locale: fr ? "fr" : "en",
+        // Inbox preview: the paragraph after the greeting.
+        preheader: (body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean)[1] ?? finalSubject).slice(0, 140),
+        eyebrow:
+          key === "contact" ? (fr ? "Message reçu" : "Message received") : fr ? "Demande de parrainage reçue" : "Sponsorship request received",
+        heading: finalSubject,
+        paragraphs: body.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean),
+        buttons: [
+          { label: fr ? "Visiter le site" : "Visit the website", href: `${siteUrl()}${fr ? "/fr/" : "/"}` },
+          { label: fr ? "Voir le programme" : "View the programme", href: `${siteUrl()}${fr ? "/fr" : ""}/programme/`, secondary: true },
+        ],
+        note: fr
+          ? `Vous recevez cet e-mail car cette adresse a été saisie dans un formulaire sur ${host}. Si ce n'était pas vous, ignorez simplement ce message.`
+          : `You are receiving this email because this address was entered in a form on ${host}. If that wasn't you, you can ignore this message.`,
+      },
+    });
     return "sent";
   } catch (err) {
     console.error(`form confirmation ${id} failed:`, err instanceof Error ? err.message.slice(0, 300) : "unknown error");

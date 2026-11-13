@@ -164,6 +164,14 @@ async function sendResetEmail(email: string) {
       to: user.email,
       subject: "Reset your Spotlight CMS password",
       text: `Hello ${user.name},\n\nUse this link within one hour to choose a new password:\n${siteUrl()}/admin/reset-password/?token=${token}\n\nIf you did not ask for this, you can ignore this email.`,
+      content: {
+        preheader: "Choose a new password for the Spotlight Nigeria CMS. The link works for one hour.",
+        eyebrow: "Spotlight CMS",
+        heading: "Reset your password",
+        paragraphs: [`Hello ${user.name},`, "Use the button below within one hour to choose a new password for the Spotlight Nigeria CMS."],
+        buttons: [{ label: "Choose a new password", href: `${siteUrl()}/admin/reset-password/?token=${token}` }],
+        note: "If you did not ask for this, you can ignore this email; your password stays the same.",
+      },
     });
     await audit({ userId: user.id, action: "auth.reset_requested", entityType: "USER", entityId: user.id, summary: `Password reset requested for ${user.email}` });
   } catch (err) {

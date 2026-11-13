@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/lib/db";
 import { emailConfigured, sendEmail } from "@/lib/email";
 import { getSetting } from "@/lib/settings";
+import { siteUrl } from "@/lib/env";
 import { FORMS, displayValue } from "./definitions";
 import { formKeys, type FormKey } from "@/lib/blocks/schema";
 
@@ -62,16 +63,26 @@ export async function notifySubmission(id: string, opts: { force?: boolean } = {
 
   const def = FORMS[key];
   const data = (sub.data ?? {}) as Record<string, string>;
+  const received = sub.createdAt.toLocaleString("en-GB", { dateStyle: "full", timeStyle: "short", timeZone: "Europe/Paris" });
+  const who = sub.name || sub.email || "a visitor";
   try {
     await sendEmail({
       to,
       replyTo: sub.email || undefined,
       subject: `[Spotlight Nigeria] ${def.title.en}${sub.name ? ` – ${sub.name}` : ""}`,
-      rows: [
-        ...def.fields.map((f) => [f.label.en.replace(/\s*\*$/, ""), displayValue(def, f.name, data[f.name])] as [string, string]),
-        ["Received", sub.createdAt.toISOString()],
-        ["Language", sub.locale.toUpperCase()],
-      ],
+      content: {
+        locale: "en",
+        preheader: `New ${def.title.en.toLowerCase()} submission from ${who}.`,
+        eyebrow: "New website submission",
+        heading: `${def.title.en} · ${who}`,
+        paragraphs: [`Received ${received} (Paris time) on the ${sub.locale === "fr" ? "French" : "English"} site.`],
+        rows: def.fields.map((f) => [f.label.en.replace(/\s*\*$/, ""), displayValue(def, f.name, data[f.name])] as [string, string]),
+        buttons: [
+          ...(sub.email ? [{ label: `Reply to ${sub.name?.split(" ")[0] || "sender"}`, href: `mailto:${sub.email}?subject=${encodeURIComponent("Re: your message to Spotlight Nigeria")}` }] : []),
+          { label: "Open in the CMS", href: `${siteUrl()}/admin/submissions/${sub.id}/`, secondary: true },
+        ],
+        note: `Sent by the Spotlight Nigeria website. Replying to this email answers ${who} directly.`,
+      },
     });
     await db.formSubmission.update({ where: { id }, data: { notifiedAt: new Date(), notifyError: null } });
     return "sent";
